@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8C2EDA9D-3541-4EEB-92B7-7EB567A8CB8E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MultiPlug.Ext.RasPi.GPIO</RootNamespace>
+    <AssemblyName>MultiPlug.Ext.RasPi.GPIO</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="MultiPlug.Base, Version=1.0.34.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MultiPlug.Base.1.0.34-alpha\lib\net452\MultiPlug.Base.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MultiPlug.Extension.Core, Version=1.0.49.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MultiPlug.Extension.Core.1.0.49-alpha\lib\net452\MultiPlug.Extension.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Swan, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\unosquare.swan.2.4.0\lib\netstandard2.0\Swan.dll</HintPath>
+    </Reference>
+    <Reference Include="Swan.Lite, Version=2.4.1.0, Culture=neutral, PublicKeyToken=30c707c872729fff, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\unosquare.swan.lite.2.3.0\lib\netstandard2.0\Swan.Lite.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="netstandard" />
+    <Reference Include="Unosquare.Raspberry.Abstractions">
+      <HintPath>..\packages\unosquare.raspberry.abstractions.0.4.0\lib\netstandard2.0\Unosquare.Raspberry.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unosquare.RaspberryIO, Version=0.17.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\unosquare.raspberry.io.0.27.0\lib\netstandard2.0\Unosquare.RaspberryIO.dll</HintPath>
+    </Reference>
+    <Reference Include="Unosquare.WiringPi">
+      <HintPath>..\packages\unosquare.wiringpi.0.5.1.custom\lib\netstandard2.0\Unosquare.WiringPi.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Components\RaspberryPi\EventCreator.cs" />
+    <Compile Include="Components\RaspberryPi\RasPiPin.cs" />
+    <Compile Include="Components\RaspberryPi\RaspberryPiComponent.cs" />
+    <Compile Include="Components\RaspberryPi\EventConsumer.cs" />
+    <Compile Include="Core.cs" />
+    <Compile Include="Models\Apps\Settings\DeleteModel.cs" />
+    <Compile Include="Models\Apps\Settings\EventModel.cs" />
+    <Compile Include="Models\Apps\Settings\HomeModel.cs" />
+    <Compile Include="Models\Apps\Settings\HomePostModel.cs" />
+    <Compile Include="Models\Apps\Settings\PinModel.cs" />
+    <Compile Include="Models\Apps\Settings\SubscriptionsModel.cs" />
+    <Compile Include="Models\Apps\Settings\SubscriptionsPostModel.cs" />
+    <Compile Include="Models\Components\Output\Subscription\Properties.cs" />
+    <Compile Include="Models\Components\Output\Subscription\Subscription.cs" />
+    <Compile Include="Models\Components\Output\Properties.cs" />
+    <Compile Include="Models\Load\RaspberryPiComponent.cs" />
+    <Compile Include="Models\Load\RasPiPin.cs" />
+    <Compile Include="Models\Load\Root.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RasPiGPIO.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewControllers\Assets\AssetsEndpoint.cs" />
+    <Compile Include="ViewControllers\Assets\ImageController.cs" />
+    <Compile Include="ViewControllers\Settings\SettingsApp.cs" />
+    <Compile Include="ViewControllers\Settings\SettingsDeleteSubscriptionController.cs" />
+    <Compile Include="ViewControllers\Settings\SettingsEventController.cs" />
+    <Compile Include="ViewControllers\Settings\SettingsHomeController.cs" />
+    <Compile Include="ViewControllers\Settings\SettingsSubscriptionsController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="ViewControllers\Settings\SettingsEvent.cshtml" />
+    <None Include="ViewControllers\Settings\SettingsHome.cshtml" />
+    <None Include="ViewControllers\Settings\SettingsSubscriptions.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ViewControllers\Assets\raspberry-pi.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

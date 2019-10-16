@@ -1,0 +1,33 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MultiPlug.Ext.RasPi.GPIO</id>
+    <version>1.0.7</version>
+    <title>MultiPlug Raspberry Pi GPIO Extension</title>
+    <authors>4IR.UK</authors>
+    <owners>4IR.UK</owners>
+    <projectUrl>https://github.com/Industry4/MultiPlug.Ext.RasPi.GPIO</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/British-Systems/MultiPlug/master/multiplug.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Control the General Purpose Input Output (GPIO) of the Raspberry Pi with this MultiPlug Extension</description>
+    <releaseNotes>Run this extension on a Raspberry Pi only using the .Net Mono runtime.
+1.0.7 Update for Raspberry Pi 4
+1.0.6 Upgraded to base classes
+1.0.5 Bug: Prevent duplicate read events
+1.0.4 Bugs
+1.0.3 Refactor: Upgraded to latest MultiPlug.Base version
+1.0.2 Enhancement: Implemented new MultiPlug.Base 1.0.25 contracts.
+1.0.1
+* Subscribe to changes to Pin values.
+* Trigger Pin values with MultiPlug Events.
+* Set Pin Input Pull Value - Off, Up, Down.
+* Known Bug: Due to the use of a external unmanaged library, error messages may occur on MultiPlug shutdown, however the shutdown will complete successfully.
+
+1.0.0 Nuget name reserve.</releaseNotes>
+    <copyright>4IR.UK British Systems 2019</copyright>
+    <tags>MultiPlug Fog_Computing Raspberry Pi Raspberry_Pi</tags>
+    <dependencies>
+      <dependency id="MultiPlug.Core" version="2.2.55" />
+    </dependencies>
+  </metadata>
+</package>

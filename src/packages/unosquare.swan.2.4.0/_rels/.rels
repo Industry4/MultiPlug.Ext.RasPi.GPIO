@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Type="http://schemas.microsoft.com/packaging/2010/07/manifest" Target="/Unosquare.Swan.nuspec" Id="RE7FA3ACC46DD0691" />
+  <Relationship Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="/package/services/metadata/core-properties/1006f99919e44aa2ae7ccc802d67b592.psmdcp" Id="RF12215C258570764" />
+</Relationships>

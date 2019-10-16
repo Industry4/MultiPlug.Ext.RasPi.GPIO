@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<coreProperties xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.openxmlformats.org/package/2006/metadata/core-properties">
+  <dc:creator>Unosquare</dc:creator>
+  <dc:description>The Raspberry Pi's IO Functionality in an easy-to use API for Mono/.NET Core
+
+This library enables developers to use the various Raspberry Pi's hardware modules including the Camera to capture images and video, the GPIO pins, and both, the SPI and I2C buses.</dc:description>
+  <dc:identifier>Unosquare.Raspberry.IO</dc:identifier>
+  <version>0.27.0</version>
+  <keywords>Raspberry Pi GPIO Camera SPI I2C Embedded IoT Mono C# .NET</keywords>
+  <lastModifiedBy>NuGet.Packaging, Version=5.3.0.3, Culture=neutral, PublicKeyToken=31bf3856ad364e35;</lastModifiedBy>
+</coreProperties>

@@ -1,0 +1,7 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/src/MultiPlug.Ext.RasPi.GPIO/bin
+/src/MultiPlug.Ext.RasPi.GPIO/obj
+/src/.vs/config/applicationhost.config

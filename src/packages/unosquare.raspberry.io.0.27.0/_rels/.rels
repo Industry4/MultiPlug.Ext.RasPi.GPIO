@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
+  <Relationship Type="http://schemas.microsoft.com/packaging/2010/07/manifest" Target="/Unosquare.Raspberry.IO.nuspec" Id="R1998A2D3259B894F" />
+  <Relationship Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="/package/services/metadata/core-properties/c146db41bf2f4d2f8808d6d80f3ec516.psmdcp" Id="R0EA199F58E21717F" />
+</Relationships>

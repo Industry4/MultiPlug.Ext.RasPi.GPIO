@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Unosquare.Raspberry.IO</id>
+    <version>0.27.0</version>
+    <title>RaspberryIO</title>
+    <authors>Unosquare</authors>
+    <owners>Mario Di Vece,Geo Perez</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://raw.githubusercontent.com/unosquare/raspberryio/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/unosquare/raspberryio</projectUrl>
+    <iconUrl>https://github.com/unosquare/raspberryio/raw/master/logos/raspberryio-logo-32.png</iconUrl>
+    <description>The Raspberry Pi's IO Functionality in an easy-to use API for Mono/.NET Core
+
+This library enables developers to use the various Raspberry Pi's hardware modules including the Camera to capture images and video, the GPIO pins, and both, the SPI and I2C buses.</description>
+    <summary>A .NET API that provides access to the Pi's GPIO, SPI, I2C, and Camera modules</summary>
+    <releaseNotes>v0.27.0
+Fix issue PI Info
+v0.25.0
+Update to SWAN 2
+v0.24.0
+Add Bluetooth Controller
+v0.23.0
+Improve networking support
+v0.21.0
+Add support to new Raspbery Pi Model 4b
+v0.20.0
+Add AudioSettings property to Pi class
+v0.19.0
+Downgrade to NETSTANDARD 1.3
+v0.18.1
+Add Abstraction layer
+v0.17.2
+Fix HardwareException running with .NET Core
+v0.17.0
+Fix fatal exception when a HardwareException is thrown.
+v0.16.0
+Can run without root
+v0.15.0
+Upgrade libWiringPi to 2.46 with a custom fix to enable SPI Channel 1.
+v0.14.1
+- Fix issues with camera
+Version 0.14.0
+- Upgrade dependencies
+Version 0.12.0
+- Added Camera Still options
+Version 0.11.0
+- Fix issue with networks
+- Support NET Standard 1.6
+Version 0.10.0
+- Upgrade libWiringPi to 2.42</releaseNotes>
+    <copyright>Unosquare (c) 2016-2019</copyright>
+    <tags>Raspberry Pi GPIO Camera SPI I2C Embedded IoT Mono C# .NET</tags>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Unosquare.Raspberry.Abstractions" version="0.4.0" />
+        <dependency id="Unosquare.Swan" version="2.3.1" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<coreProperties xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.openxmlformats.org/package/2006/metadata/core-properties">
+  <dc:creator>Unosquare</dc:creator>
+  <dc:description>Repeating code and reinventing the wheel is generally considered bad practice. At Unosquare we are committed to beautiful code and great software. Swan is a collection of classes and extension methods that we and other good developers have developed and evolved over the years. We found ourselves copying and pasting the same code for every project every time we started it. We decide to kill that cycle once and for all. This is the result of that idea. Our philosophy is that SWAN should have no external dependencies, it should be cross-platform, and it should be useful.</dc:description>
+  <dc:identifier>Unosquare.Swan</dc:identifier>
+  <version>2.4.0</version>
+  <keywords>best-practices netcore network objectmapper json-serialization</keywords>
+  <lastModifiedBy>NuGet.Packaging, Version=5.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35;</lastModifiedBy>
+</coreProperties>
