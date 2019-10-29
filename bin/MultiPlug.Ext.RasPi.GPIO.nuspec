@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>MultiPlug.Ext.RasPi.GPIO</id>
-    <version>1.0.7</version>
+    <version>1.0.9</version>
     <title>MultiPlug Raspberry Pi GPIO Extension</title>
     <authors>4IR.UK</authors>
     <owners>4IR.UK</owners>
@@ -11,6 +11,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Control the General Purpose Input Output (GPIO) of the Raspberry Pi with this MultiPlug Extension</description>
     <releaseNotes>Run this extension on a Raspberry Pi only using the .Net Mono runtime.
+1.0.9 Refactor: Upgraded to latest MultiPlug.Base version
 1.0.7 Update for Raspberry Pi 4
 1.0.6 Upgraded to base classes
 1.0.5 Bug: Prevent duplicate read events

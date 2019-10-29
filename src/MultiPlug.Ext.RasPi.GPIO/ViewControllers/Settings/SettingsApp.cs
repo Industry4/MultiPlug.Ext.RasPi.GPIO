@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
 using MultiPlug.Base.Http;
-using MultiPlug.Extension.Core.Views;
+using MultiPlug.Extension.Core.Http;
+using MultiPlug.Extension.Core.Attribute;
 
 namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings
 {
-    class SettingsApp : ViewBase
+    [ViewAs(ViewAs.Partial)]
+    [HttpEndpointType(HttpEndpointType.Settings)]
+    class SettingsApp : HttpEndpoint
     {
-        readonly Guid m_Id = Guid.NewGuid();
-
         readonly Controller[] m_Controllers = new Controller[]{
             new SettingsHomeController(),
             new SettingsSubscriptionsController(),
@@ -20,38 +21,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings
             get
             {
                 return m_Controllers;
-            }
-        }
-
-        public override Guid Id
-        {
-            get
-            {
-                return m_Id;
-            }
-        }
-
-        public override bool isPartial
-        {
-            get
-            {
-                return true;
-            }
-        }
-
-        public override string Name
-        {
-            get
-            {
-                return "Raspberry Pi";
-            }
-        }
-
-        public override ViewType Type
-        {
-            get
-            {
-                return ViewType.Settings;
             }
         }
     }

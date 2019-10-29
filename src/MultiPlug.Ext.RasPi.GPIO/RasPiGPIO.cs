@@ -1,8 +1,9 @@
 ﻿using System;
+
 using MultiPlug.Base.Exchange;
 using MultiPlug.Extension.Core;
-using MultiPlug.Extension.Core.Views;
-using MultiPlug.Extension.Core.Collections;
+using MultiPlug.Extension.Core.Http;
+
 using MultiPlug.Ext.RasPi.GPIO.Properties;
 using MultiPlug.Ext.RasPi.GPIO.ViewControllers.Assets;
 using MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings;
@@ -14,11 +15,11 @@ namespace MultiPlug.Ext.RasPi.GPIO
     {
         private Models.Load.Root m_LoadModel = null;
 
-        private ViewBase[] m_Apps;
+        private HttpEndpoint[] m_Apps;
 
         public RasPiGPIO()
         {
-            m_Apps = new ViewBase[] { new SettingsApp(), new AssetsEndpoint() };
+            m_Apps = new HttpEndpoint[] { new SettingsApp(), new AssetsEndpoint() };
 
             Core.Instance.RaspberryPi.SubscriptionsUpdated += OnSubscriptionsUpdated;
             Core.Instance.RaspberryPi.EventsUpdated += OnEventsUpdated;
@@ -34,7 +35,7 @@ namespace MultiPlug.Ext.RasPi.GPIO
             SubscriptionsUpdated?.Invoke(this, Subscriptions);
         }
 
-        public override ViewBase[] Apps
+        public override HttpEndpoint[] HttpEndpoints
         {
             get
             {
@@ -71,10 +72,12 @@ namespace MultiPlug.Ext.RasPi.GPIO
             }
         }
 
-        public override event EventHandler<ViewBase[]> AppsUpdated;
         public override event EventHandler<Event[]> EventsUpdated;
         public override event EventHandler<Subscription[]> SubscriptionsUpdated;
+        #pragma warning disable 0067
+        public override event EventHandler<HttpEndpoint[]> HttpEndpointsUpdated;
         public override event EventHandler<RazorTemplate[]> NewRazorTemplates;
+        #pragma warning restore 0067
 
         public override void Initialise()
         {
@@ -87,11 +90,6 @@ namespace MultiPlug.Ext.RasPi.GPIO
             }
         }
 
-        public override void Load(KeyValuesJson[] config)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Load(Models.Load.Root theLoadModel)
         {
             if (theLoadModel.RaspberryPi == null)
@@ -100,11 +98,6 @@ namespace MultiPlug.Ext.RasPi.GPIO
             }
 
             m_LoadModel = theLoadModel;
-        }
-
-        public override void OnUnhandledException(UnhandledExceptionEventArgs args)
-        {
-            throw new NotImplementedException();
         }
 
         public override object Save()
@@ -117,7 +110,7 @@ namespace MultiPlug.Ext.RasPi.GPIO
             EventCreator.FireEvents = true;
         }
 
-        public override void Stop()
+        public override void Shutdown()
         {
             EventCreator.FireEvents = false;
             Core.Instance.RaspberryPi.Shutdown();
