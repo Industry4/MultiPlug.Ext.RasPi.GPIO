@@ -27,12 +27,12 @@ namespace MultiPlug.Ext.RasPi.GPIO
 
         private void OnEventsUpdated(object sender, EventArgs e)
         {
-            EventsUpdated?.Invoke(this, Events);
+            MultiPlugSignals.Updates.Events();
         }
 
         private void OnSubscriptionsUpdated(object sender, EventArgs e)
         {
-            SubscriptionsUpdated?.Invoke(this, Subscriptions);
+            MultiPlugSignals.Updates.Subscriptions();
         }
 
         public override HttpEndpoint[] HttpEndpoints
@@ -71,13 +71,6 @@ namespace MultiPlug.Ext.RasPi.GPIO
                 };
             }
         }
-
-        public override event EventHandler<Event[]> EventsUpdated;
-        public override event EventHandler<Subscription[]> SubscriptionsUpdated;
-        #pragma warning disable 0067
-        public override event EventHandler<HttpEndpoint[]> HttpEndpointsUpdated;
-        public override event EventHandler<RazorTemplate[]> NewRazorTemplates;
-        #pragma warning restore 0067
 
         public override void Initialise()
         {

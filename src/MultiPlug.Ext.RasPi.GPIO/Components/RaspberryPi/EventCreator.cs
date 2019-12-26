@@ -6,8 +6,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 {
     public class EventCreator : EventableBase
     {
-        public override event MPEventHandler Update;
-
         readonly IGpioPin m_GpioPin = null;
         readonly Models.Components.Output.Properties m_OutputProperties;
 
