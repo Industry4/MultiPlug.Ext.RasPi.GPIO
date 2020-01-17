@@ -49,7 +49,6 @@ The Extension can be accessed from: [http://multiplug.local/extensions/raspi-con
 
 
 ### Known Bugs
-* Due to a bug with the MultiPlug platform an system restart is needed before the Extension can be accessed. Restart the system via the option found in [http://multiplug.local/settings](http://multiplug.local/settings/)
 * The use of the native GPIO libary results in a slow timed-out shutdown.
 
 ## Authors
@@ -61,7 +60,6 @@ The Extension can be accessed from: [http://multiplug.local/extensions/raspi-con
 This project is licensed under the MIT License
 ## Acknowledgments
 Thanks for the support from:
-* Seemin Suleri
 * Julian Singh
 * Ian Rathbone
 * Julius Angwenyi
