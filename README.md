@@ -1,5 +1,5 @@
 # MultiPlug.Ext.RasPi.GPIO
-Raspberry Pi GPIO Extension for the MultiPlug .Net Fog Computing Platform
+Raspberry Pi GPIO Extension for the MultiPlug .Net Edge Computing Platform
 
 ## Getting Started
 
@@ -7,30 +7,14 @@ These instructions will guide you the installation of the Extension on an instan
 
 ### Prerequisites
 
-Both Mono and the MultiPlug .Net Fog Computing Platform must be installed on Raspberry Pi's Raspbian operating system.
-
-Add the following line to /etc/apt/sources.list
-
-```
-deb [trusted=yes] http://apt.multiplug.uk ./
-```
-Run the following command:
-```
-sudo apt update
-```
-To install Mono run the following command:
-```
-sudo apt-get install mono-complete
-```
-To install MultiPlug run the following command:
-```
-sudo apt-get install multiplug
-```
+Install MultiPlug. Instructions: [apt.multiplug.app/](https://apt.multiplug.app/)
 
 ### Installing
 
 The Extension can be installed using the in-built MultiPlug installer located at [http://multiplug.local/settings/add/](http://multiplug.local/settings/add/)
  *Replace multiplug.local for the IP Address of the MultiPlug instance*
+ 
+Or sideloaded by downloading [multiplug.ext.raspi.gpio.nupkg](https://www.nuget.org/api/v2/package/MultiPlug.Ext.RasPi.GPIO/)
 
 ## Runtime
 ### Screenshot
@@ -39,7 +23,7 @@ The Extension can be installed using the in-built MultiPlug installer located at
 
 ### Application
 
-The Extension can be accessed from: [http://multiplug.local/extensions/raspi-config/](http://multiplug.local/extensions/raspi-config/)
+The Extension can be accessed from: [http://multiplug.local/extensions/multiplug.ext.raspi.gpio/](http://multiplug.local/extensions/multiplug.ext.raspi.gpio/)
  *Replace multiplug.local for the IP Address of the MultiPlug instance*
  
 ### Functionality
