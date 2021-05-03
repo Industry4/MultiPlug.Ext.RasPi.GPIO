@@ -5,8 +5,6 @@ using MultiPlug.Extension.Core;
 using MultiPlug.Extension.Core.Http;
 
 using MultiPlug.Ext.RasPi.GPIO.Properties;
-using MultiPlug.Ext.RasPi.GPIO.ViewControllers.Assets;
-using MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings;
 using MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi;
 
 namespace MultiPlug.Ext.RasPi.GPIO
@@ -15,32 +13,20 @@ namespace MultiPlug.Ext.RasPi.GPIO
     {
         private Models.Load.Root m_LoadModel = null;
 
-        private HttpEndpoint[] m_Apps;
-
         public RasPiGPIO()
         {
-            m_Apps = new HttpEndpoint[] { new SettingsApp(), new AssetsEndpoint() };
-
             Core.Instance.RaspberryPi.SubscriptionsUpdated += OnSubscriptionsUpdated;
             Core.Instance.RaspberryPi.EventsUpdated += OnEventsUpdated;
         }
 
         private void OnEventsUpdated(object sender, EventArgs e)
         {
-            MultiPlugSignals.Updates.Events();
+            MultiPlugActions.Extension.Updates.Events();
         }
 
         private void OnSubscriptionsUpdated(object sender, EventArgs e)
         {
-            MultiPlugSignals.Updates.Subscriptions();
-        }
-
-        public override HttpEndpoint[] HttpEndpoints
-        {
-            get
-            {
-                return m_Apps;
-            }
+            MultiPlugActions.Extension.Updates.Subscriptions();
         }
 
         public override Event[] Events

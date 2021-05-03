@@ -7,7 +7,7 @@ using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
 namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings
 {
     [Route("event")]
-    class SettingsEventController : Controller
+    public class SettingsEventController : SettingsApp
     {
         public Response Get(string id)
         {

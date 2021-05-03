@@ -8,7 +8,7 @@ using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
 namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings
 {
     [Route("")]
-    class SettingsHomeController : Controller
+    public class SettingsHomeController : SettingsApp
     {
         public Response Get()
         {
@@ -22,7 +22,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings
                     EventLow = Output.Properties.EventLow,
                     Output = Output.Properties.Output,
                     PullMode = Output.Properties.PullMode,
-                    SubscriptionsCount = Output.Properties.Subscriptions.Count().ToString(),
+                    SubscriptionsCount = Output.Properties.Subscriptions.Count.ToString(),
                     EventId = Output.Properties.Event.Id,
                     EventDescription = Output.Properties.Event.Description
                 } ).ToArray()

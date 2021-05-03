@@ -6,12 +6,12 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MultiPlug Raspberry Pi GPIO Extension")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Access the Raspberry Pi GPIO")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("4IR.UK British Systems")]
 [assembly: AssemblyProduct("RasPi GPIO")]
-[assembly: AssemblyCopyright("4IR.UK British Systems 2020")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("4IR.UK British Systems 2021")]
+[assembly: AssemblyTrademark("Raspberry Pi is a trademark of the Raspberry Pi Foundation")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.11.0")]
-[assembly: AssemblyFileVersion("1.0.11.0")]
+[assembly: AssemblyVersion("1.0.12.0")]
+[assembly: AssemblyFileVersion("1.0.12.0")]

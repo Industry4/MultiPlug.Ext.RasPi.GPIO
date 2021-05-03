@@ -5,7 +5,7 @@ using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
 namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings
 {
     [Route("deletesubscription")]
-    class SettingsDeleteSubscriptionController : Controller
+    public class SettingsDeleteSubscriptionController : SettingsApp
     {
         public Response Get(DeleteModel theModel)
         {

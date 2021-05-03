@@ -2,15 +2,17 @@
 <package >
   <metadata>
     <id>MultiPlug.Ext.RasPi.GPIO</id>
-    <version>1.0.11</version>
+    <version>1.0.12</version>
     <title>MultiPlug Raspberry Pi GPIO Extension</title>
     <authors>4IR.UK</authors>
     <owners>4IR.UK</owners>
     <projectUrl>https://github.com/Industry4/MultiPlug.Ext.RasPi.GPIO</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/Industry4/MultiPlug.Ext.RasPi.GPIO/master/multiplug.ico</iconUrl>
+    <icon>images\multiplugraspberrypiico.png</icon>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Control the General Purpose Input Output (GPIO) of the Raspberry Pi with this MultiPlug Extension</description>
+	<license type="expression">MIT</license>
     <releaseNotes>Run this extension on a Raspberry Pi only using the .Net Mono runtime.
+1.0.12 Rebuilt due to changes with base classes
 1.0.11 Rebuilt due to changes with base classes
 1.0.10 Applied new Base classes
 1.0.9 Refactor: Upgraded to latest MultiPlug.Base version
@@ -27,10 +29,25 @@
 * Known Bug: Due to the use of a external unmanaged library, error messages may occur on MultiPlug shutdown, however the shutdown will complete successfully.
 
 1.0.0 Nuget name reserve.</releaseNotes>
-    <copyright>4IR.UK British Systems 2020</copyright>
-    <tags>MultiPlug Fog_Computing Raspberry Pi Raspberry_Pi</tags>
+    <copyright>4IR.UK British Systems 2021</copyright>
+    <tags>MultiPlug Edge_Computing Raspberry Pi Raspberry_Pi IoT</tags>
     <dependencies>
-      <dependency id="MultiPlug.Core" version="2.2.59" />
+      <group targetFramework=".NETFramework4.7.2">
+        <dependency id="MultiPlug.Base" version="1.0.50" />
+        <dependency id="MultiPlug.Extension.Core" version="1.0.59" />
+        <dependency id="MultiPlug.Core" version="2.2.72" />
+      </group>
     </dependencies>
   </metadata>
+   <files>
+    <file src="images\multiplugraspberrypiico.png" target="images\" />
+    <file src="..\..\src\MultiPlug.Ext.RasPi.GPIO\bin\Release\MultiPlug.Ext.RasPi.GPIO.dll" target="lib\net472" />
+	<file src="..\..\src\MultiPlug.Ext.RasPi.GPIO\bin\Release\Swan.dll" target="lib\net472" />	
+	<file src="..\..\src\MultiPlug.Ext.RasPi.GPIO\bin\Release\Swan.Lite.dll" target="lib\net472" />
+	<file src="..\..\src\MultiPlug.Ext.RasPi.GPIO\bin\Release\Unosquare.Raspberry.Abstractions.dll" target="lib\net472" />
+	<file src="..\..\src\MultiPlug.Ext.RasPi.GPIO\bin\Release\Unosquare.RaspberryIO.dll" target="lib\net472" />
+	<file src="..\..\src\MultiPlug.Ext.RasPi.GPIO\bin\Release\Unosquare.WiringPi.dll" target="lib\net472" />
+  </files>
+  
+  
 </package>

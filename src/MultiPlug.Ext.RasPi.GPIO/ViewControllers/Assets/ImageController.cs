@@ -6,7 +6,7 @@ using System.Drawing;
 namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Assets
 {
     [Route("images/*")]
-    class ImageController : Controller
+    public class ImageController : AssetsEndpoint
     {
         public Response Get(string theName)
         {

@@ -9,7 +9,7 @@ using MultiPlug.Ext.RasPi.GPIO.Models.Components.Output.Subscription;
 namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings
 {
     [Route("subscriptions")]
-    class SettingsSubscriptionsController : Controller
+    public class SettingsSubscriptionsController : SettingsApp
     {
         public Response Get( string id )
         {

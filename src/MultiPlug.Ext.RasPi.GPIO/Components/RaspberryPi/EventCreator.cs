@@ -81,7 +81,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                 if(PinState != m_LastOutputState)
                 {
                     m_LastOutputState = PinState;
-                    Console.WriteLine("ReadGpioPin() BcmPin: " + m_GpioPin.BcmPin);
+                    Console.WriteLine(DateTime.Now.ToString("h:mm:ss") + "[I/O] IN [Bcm Pin] " + m_GpioPin.BcmPin + ( m_LastOutputState ? " [state] High":" [state] Low" ) );
                     Update?.Invoke(CreateGroupData());
                 }
             }
