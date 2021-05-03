@@ -3,11 +3,11 @@ Raspberry Pi GPIO Extension for the MultiPlug .Net Edge Computing Platform
 
 ## Getting Started
 
-These instructions will guide you the installation of the Extension on an instance of the MultiPlug .Net Fog Computing Platform.
+These instructions will guide you the installation of the Extension on an instance of the MultiPlug .Net Edge Computing Platform.
 
 ### Prerequisites
 
-Install MultiPlug. Instructions: [apt.multiplug.app/](https://apt.multiplug.app/)
+Install the MultiPlug Edge Computing Platform. Instructions: [apt.multiplug.app](https://apt.multiplug.app/)
 
 ### Installing
 
@@ -48,3 +48,8 @@ Thanks for the support from:
 * Ian Rathbone
 * Julius Angwenyi
 * Brainboxes Ltd
+
+## Also see
+MultiPlug Discovery Apps:
+* [Windows](https://windows.multiplug.app/bin/DesktopSetup.exe)
+* [Android](https://play.google.com/store/apps/details?id=uk.britishsystems.multiplug)
