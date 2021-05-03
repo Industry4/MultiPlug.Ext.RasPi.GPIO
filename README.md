@@ -37,7 +37,7 @@ The Extension can be accessed from: [http://multiplug.local/extensions/multiplug
 
 ## Authors
 
-* **David Graham** - *Initial work* - [4IR British Systems](https://4ir.uk)
+* **David Graham** - *Initial work* - [4IR British Systems](https://www.4ir.uk)
 
 ## License
 
