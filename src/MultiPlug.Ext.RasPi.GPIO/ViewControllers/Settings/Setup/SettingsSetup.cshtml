@@ -1,0 +1,168 @@
+﻿@model MultiPlug.Base.Http.EdgeApp
+
+@functions {
+
+    public static string IsUnset(string Output)
+    {
+        return Output == "" ? "selected" : string.Empty;
+    }
+
+    public static string IsOutput(string Output)
+    {
+        return Output == "true" ? "selected" : string.Empty;
+    }
+
+    public static string IsInput(string Output)
+    {
+        return Output == "false" ? "selected" : string.Empty;
+    }
+
+    public static string PullModeOff(int PullMode)
+    {
+        return PullMode == 0 ? "selected" : string.Empty;
+    }
+
+    public static string PullModeDown(int PullMode)
+    {
+        return PullMode == 1 ? "selected" : string.Empty;
+    }
+
+    public static string PullModeUp(int PullMode)
+    {
+        return PullMode == 2 ? "selected" : string.Empty;
+    }
+}
+
+<form action="" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded">
+    <section class="row-fluid">
+
+        <div class="row-fluid">
+            <div class="box">
+                <div class="span2">
+                    <a style="line-height: 52px;" href="#"><img alt="Raspberry Pi Logo" src="@Raw(Model.Context.Paths.Assets)images/raspberry-pi.png"></a>
+                </div>
+                <div class="span8">
+                    <p style="font-size:26px; line-height: 54px; text-align: center; margin: 0px;">Raspberry Pi GPIO</p>
+                </div>
+                <div class="span2" style="text-align: right;">
+                    <button type="submit" value="submit" style="height:54px; width:65px" class="item btn btn-green"><i class="icon-save icon-large"></i><p>Save</p></button>
+                </div>
+            </div>
+        </div>
+
+        @Include("MultiPlug.Ext.RasPi.GPIO.RaspPiGPIO_Settings_Navigation")
+
+        <div class="row-fluid">
+            <div class="box">
+                <p>Special Build</p>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <b>BCM Pin</b>
+                    </div>
+
+                    <div class="span2">
+                        <b>I/O</b>
+                    </div>
+
+                    <div class="span2">
+                        <b>Pull</b>
+                    </div>
+
+                    <div class="span2">
+                        <b>Init</b>
+                    </div>
+
+                    <div class="span2">
+                        <b>Shutdown</b>
+                    </div>
+
+                    <div class="span1">
+                        <b>Event</b>
+                    </div>
+                    <div class="span1">
+                        <b>Subs</b>
+                    </div>
+                </div>
+
+                @foreach (var Output in @Model.Extension.Model.Outputs)
+                {
+                    <input type="hidden" name="BcmPinNumber" value="@Output.BcmPinNumber">
+                    <div class="row-fluid">
+                        <div class="span2">
+                            @Output.BcmPinNumber
+                        </div>
+
+
+
+                        <div class="span2">
+                            <select name='IsOutput' class="input-block-level">
+                                <option value="" @IsUnset(Output.Output)>Unset</option>
+                                <option value="true" @IsOutput(Output.Output)>Output</option>
+                                <option value="false" @IsInput(Output.Output)>Input</option>
+                            </select>
+
+
+
+
+                            @*<input class="PinIsOutput" id='@Output.BcmPinNumber-output' @Output.IsOutput name="IsOutput" value="true" type="checkbox">
+                                <input id='@Raw(Output.BcmPinNumber)-output-false' @Output.IsInput name='IsOutput' value='false' type='hidden'>*@
+                        </div>
+
+                        <div class="span2">
+                            <select name='PullMode' class="input-block-level">
+                                <option value="0" @PullModeOff(Output.PullMode)>Off</option>
+                                <option value="1" @PullModeDown(Output.PullMode)>Down</option>
+                                <option value="2" @PullModeUp(Output.PullMode)>Up</option>
+                            </select>
+                        </div>
+
+                        <div class="span2">
+                            <select name='InitState' class="input-block-level">
+                                <option value="0" selected>Unchanged</option>
+                                <option value="3">Low</option>
+                                <option value="1">High</option>
+                            </select>
+                        </div>
+
+                        <div class="span2">
+                            <select name='ShutdownState' class="input-block-level">
+                                <option value="0" selected>Unchanged</option>
+                                <option value="3">Low</option>
+                                <option value="1">High</option>
+                            </select>
+                        </div>
+
+
+
+
+
+
+                        @*<div class="span3">
+                                <input name="" disabled class="input-block-level" type="text" value="@Output.EventId">
+                            </div>
+
+                            <div class="span2">
+                                <input name="" disabled class="input-block-level" type="text" value="@Output.EventDescription">
+                            </div>*@
+
+                        <div class="span1">
+                            <a class="btn btn-black" href="@Raw(Model.Context.Paths.Home)event/?id=@Output.BcmPinNumber"><i class="icon-pencil"></i></a>
+                        </div>
+
+                        <div class="span1">
+                            <a class="btn btn-black" href="@Raw(Model.Context.Paths.Home)subscriptions/?id=@Output.BcmPinNumber">@Output.SubscriptionsCount</a>
+                        </div>
+
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+</form>
+
+<script>
+    $(".PinIsOutput").change(function () {
+        var hiddenfalse = $("#" + $(this).attr('id') + "-false");
+        hiddenfalse.prop("disabled", (this.checked) ? true : false);
+    });
+</script>

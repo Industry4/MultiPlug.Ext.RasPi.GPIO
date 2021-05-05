@@ -69,6 +69,10 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
         
         public void Shutdown()
         {
+            foreach (var output in Outputs)
+            {
+                output.shutdown();
+            }
         }
 
         private void Init()
@@ -77,9 +81,14 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             {
                 foreach ( IGpioPin pin in Pi.Gpio )
                 {
-                    if( pin.BcmPinNumber == 3 ||    // Reserved Shutdown & boot pin
+                    if( pin.BcmPinNumber == 0 ||    // EEPROM
+                        pin.BcmPinNumber == 1 ||    // EEPROM
+                        pin.BcmPinNumber == 2 ||    // RTC
+                        pin.BcmPinNumber == 3 ||    // RTC
+                        pin.BcmPinNumber == 4 ||    // Reserved Shutdown & boot pin
                         pin.BcmPinNumber == 14 ||   // Reserved UART Transmit
-                        pin.BcmPinNumber == 15 )    // Reserved UART Receive
+                        pin.BcmPinNumber == 15 ||   // Reserved UART Receive
+                        pin.BcmPinNumber == 18 )    // Fan
                     {
                         continue;
                     }
@@ -210,7 +219,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             EnableUpdateEvents(true);
         }
 
-        internal void Update(List<Models.Components.Output.Properties> theProperties)
+        internal void Update(Models.Components.Output.Properties[] theProperties)
         {
             EnableUpdateEvents(false);
 
@@ -256,7 +265,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
         {
             get
             {
-                return Outputs.Where(o => o.Properties.Output == false ).Select( o => o.Properties.Event).ToList();
+                return Outputs.Where(o => o.Properties.Output == "false" ).Select( o => o.Properties.Event).ToList();
             }
         }
     }

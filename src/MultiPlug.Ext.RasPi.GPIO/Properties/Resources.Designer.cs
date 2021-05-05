@@ -71,7 +71,28 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @model MultiPlug.Ext.RasPi.Models.Apps.Settings.EventModel
+        ///   Looks up a localized string similar to @model MultiPlug.Base.Http.EdgeApp
+        ///
+        ///&lt;section class=&quot;row-fluid&quot;&gt;
+        ///
+        ///    &lt;div class=&quot;row-fluid&quot;&gt;
+        ///        &lt;div class=&quot;box&quot;&gt;
+        ///            &lt;div class=&quot;span3&quot;&gt;
+        ///                &lt;a style=&quot;line-height: 52px;&quot; href=&quot;#&quot;&gt;&lt;img alt=&quot;Raspberry Pi Logo&quot; src=&quot;@Raw(Model.Context.Paths.Assets)images/raspberry-pi.png&quot;&gt;&lt;/a&gt;
+        ///            &lt;/div&gt;
+        ///            &lt;div class=&quot;span6&quot;&gt;
+        ///                &lt;p style=&quot;font-size:26px; line-height: 54px; text-align: center; margin: 0px;&quot;&gt;Raspberry Pi Configuration&lt;/p&gt;
+        ///            &lt;/div&gt;
+        ///   [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SettingsAbout {
+            get {
+                return ResourceManager.GetString("SettingsAbout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @model MultiPlug.Base.Http.EdgeApp
         ///
         ///&lt;form action=&quot;&quot; method=&quot;post&quot; accept-charset=&quot;utf-8&quot; enctype=&quot;application/x-www-form-urlencoded&quot;&gt;
         ///    &lt;section class=&quot;row-fluid&quot;&gt;
@@ -79,10 +100,10 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         ///        &lt;div class=&quot;row-fluid&quot;&gt;
         ///            &lt;div class=&quot;box&quot;&gt;
         ///                &lt;div class=&quot;span4&quot;&gt;
-        ///                    &lt;a style=&quot;line-height: 52px;&quot; href=&quot;#&quot;&gt;&lt;img alt=&quot;Raspberry Pi Logo&quot; src=&quot;assets/raspi-gpio/images/raspberry-pi.png&quot;&gt;&lt;/a&gt;
+        ///                    &lt;a style=&quot;line-height: 52px;&quot; href=&quot;#&quot;&gt;&lt;img alt=&quot;Raspberry Pi Logo&quot; src=&quot;@Raw(Model.Context.Paths.Assets)images/raspberry-pi.png&quot;&gt;&lt;/a&gt;
         ///                &lt;/div&gt;
         ///                &lt;div class=&quot;span3&quot;&gt;
-        ///             [rest of string was truncated]&quot;;.
+        ///                    &lt;p [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SettingsEvent {
             get {
@@ -91,18 +112,28 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @model MultiPlug.Ext.RasPi.Models.Apps.Settings.HomeModel
+        ///   Looks up a localized string similar to @model MultiPlug.Base.Http.EdgeApp
         ///
-        ///&lt;form action=&quot;&quot; method=&quot;post&quot; accept-charset=&quot;utf-8&quot; enctype=&quot;application/x-www-form-urlencoded&quot;&gt;
-        ///    &lt;section class=&quot;row-fluid&quot;&gt;
+        ///@functions {
         ///
-        ///        &lt;div class=&quot;row-fluid&quot;&gt;
-        ///            &lt;div class=&quot;box&quot;&gt;
-        ///                &lt;div class=&quot;span4&quot;&gt;
-        ///                    &lt;a style=&quot;line-height: 52px;&quot; href=&quot;#&quot;&gt;&lt;img alt=&quot;Raspberry Pi Logo&quot; src=&quot;assets/raspi-gpio/images/raspberry-pi.png&quot;&gt;&lt;/a&gt;
-        ///                &lt;/div&gt;
-        ///                &lt;div class=&quot;span3&quot;&gt;
-        ///              [rest of string was truncated]&quot;;.
+        ///    public static string IsUnset(string Output)
+        ///    {
+        ///        return Output == &quot;&quot; ? &quot;selected&quot; : string.Empty;
+        ///    }
+        ///
+        ///    public static string IsOutput(string Output)
+        ///    {
+        ///        return Output == &quot;true&quot; ? &quot;selected&quot; : string.Empty;
+        ///    }
+        ///
+        ///    public static string IsInput(string Output)
+        ///    {
+        ///        return Output == &quot;false&quot; ? &quot;selected&quot; : string.Empty;
+        ///    }
+        ///
+        ///    public static string PullModeOff(int PullMode)
+        ///    {
+        ///        return PullM [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SettingsHome {
             get {
@@ -111,7 +142,60 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to @model MultiPlug.Ext.RasPi.Models.Apps.Settings.SubscriptionsModel
+        ///   Looks up a localized string similar to @model MultiPlug.Base.Http.EdgeApp
+        ///@functions {
+        ///    public string NavLocationIsHome()
+        ///    {
+        ///        return Model.Context.Paths.Current == Model.Context.Paths.Home ? &quot;active&quot; : string.Empty;
+        ///    }
+        ///
+        ///    public string NavLocationIsSetup()
+        ///    {
+        ///        return Model.Context.Paths.Current == Model.Context.Paths.Home + &quot;setup/&quot; ? &quot;active&quot; : string.Empty;
+        ///    }
+        ///
+        ///    public string NavLocationIsAbout()
+        ///    {
+        ///        return Model.Context.Paths.Current == Model.Context.Paths.Home + &quot;about/&quot; ? &quot;active&quot; :  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SettingsNavigation {
+            get {
+                return ResourceManager.GetString("SettingsNavigation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @model MultiPlug.Base.Http.EdgeApp
+        ///
+        ///@functions {
+        ///
+        ///    public static string IsUnset(string Output)
+        ///    {
+        ///        return Output == &quot;&quot; ? &quot;selected&quot; : string.Empty;
+        ///    }
+        ///
+        ///    public static string IsOutput(string Output)
+        ///    {
+        ///        return Output == &quot;true&quot; ? &quot;selected&quot; : string.Empty;
+        ///    }
+        ///
+        ///    public static string IsInput(string Output)
+        ///    {
+        ///        return Output == &quot;false&quot; ? &quot;selected&quot; : string.Empty;
+        ///    }
+        ///
+        ///    public static string PullModeOff(int PullMode)
+        ///    {
+        ///        return PullM [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SettingsSetup {
+            get {
+                return ResourceManager.GetString("SettingsSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @model MultiPlug.Base.Http.EdgeApp
         ///
         ///&lt;form action=&quot;&quot; method=&quot;post&quot; accept-charset=&quot;utf-8&quot; enctype=&quot;application/x-www-form-urlencoded&quot;&gt;
         ///    &lt;section class=&quot;row-fluid&quot;&gt;
@@ -119,10 +203,10 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         ///        &lt;div class=&quot;row-fluid&quot;&gt;
         ///            &lt;div class=&quot;box&quot;&gt;
         ///                &lt;div class=&quot;span4&quot;&gt;
-        ///                    &lt;a style=&quot;line-height: 52px;&quot; href=&quot;#&quot;&gt;&lt;img alt=&quot;Raspberry Pi Logo&quot; src=&quot;assets/raspi-gpio/images/raspberry-pi.png&quot;&gt;&lt;/a&gt;
+        ///                    &lt;a style=&quot;line-height: 52px;&quot; href=&quot;#&quot;&gt;&lt;img alt=&quot;Raspberry Pi Logo&quot; src=&quot;@Raw(Model.Context.Paths.Assets)images/raspberry-pi.png&quot;&gt;&lt;/a&gt;
         ///                &lt;/div&gt;
         ///                &lt;div class=&quot;span3&quot;&gt;
-        ///     [rest of string was truncated]&quot;;.
+        ///                    &lt;p [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SettingsSubscriptions {
             get {

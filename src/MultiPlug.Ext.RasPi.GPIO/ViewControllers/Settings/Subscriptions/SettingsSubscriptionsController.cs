@@ -5,8 +5,9 @@ using MultiPlug.Base.Attribute;
 using MultiPlug.Base.Http;
 using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
 using MultiPlug.Ext.RasPi.GPIO.Models.Components.Output.Subscription;
+using MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.SharedRazor;
 
-namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings
+namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Subscriptions
 {
     [Route("subscriptions")]
     public class SettingsSubscriptionsController : SettingsApp
@@ -27,7 +28,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings
             return new Response
             {
                 Model = Model,
-                Template = "GetSettingsSubscriptions"
+                Template = Templates.Subscriptions
             };
         }
 

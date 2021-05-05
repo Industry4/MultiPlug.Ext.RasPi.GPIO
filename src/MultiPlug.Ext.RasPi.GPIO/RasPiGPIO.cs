@@ -6,6 +6,7 @@ using MultiPlug.Extension.Core.Http;
 
 using MultiPlug.Ext.RasPi.GPIO.Properties;
 using MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi;
+using MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.SharedRazor;
 
 namespace MultiPlug.Ext.RasPi.GPIO
 {
@@ -51,9 +52,12 @@ namespace MultiPlug.Ext.RasPi.GPIO
             {
                 return new RazorTemplate[]
                 {
-                    new RazorTemplate("GetSettingsEvent", Resources.SettingsEvent),
-                    new RazorTemplate("GetSettingsHome", Resources.SettingsHome),
-                    new RazorTemplate("GetSettingsSubscriptions", Resources.SettingsSubscriptions)
+                    new RazorTemplate(Templates.Navigation, Resources.SettingsNavigation),
+                    new RazorTemplate(Templates.Home, Resources.SettingsHome),
+                    new RazorTemplate(Templates.Setup, Resources.SettingsSetup),
+                    new RazorTemplate(Templates.Event, Resources.SettingsEvent),
+                    new RazorTemplate(Templates.Subscriptions, Resources.SettingsSubscriptions),
+                    new RazorTemplate(Templates.About, Resources.SettingsAbout)
                 };
             }
         }
@@ -62,10 +66,10 @@ namespace MultiPlug.Ext.RasPi.GPIO
         {
             if(m_LoadModel != null)
             {
-                EventCreator.FireEvents = false;
+                RasPiPin.FireEvents = false;
                 Core.Instance.RaspberryPi.Update(m_LoadModel.RaspberryPi.Outputs);
                 m_LoadModel = null;
-                EventCreator.FireEvents = true;
+                RasPiPin.FireEvents = true;
             }
         }
 
@@ -86,12 +90,12 @@ namespace MultiPlug.Ext.RasPi.GPIO
 
         public override void Start()
         {
-            EventCreator.FireEvents = true;
+            RasPiPin.FireEvents = true;
         }
 
         public override void Shutdown()
         {
-            EventCreator.FireEvents = false;
+            RasPiPin.FireEvents = false;
             Core.Instance.RaspberryPi.Shutdown();
         }
     }

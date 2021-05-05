@@ -1,29 +1,29 @@
 ﻿using System;
 using System.Linq;
 using MultiPlug.Base.Exchange;
-using Unosquare.RaspberryIO.Abstractions;
-
 
 namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 {
     class TheEventConsumer : EventConsumer
     {
-        readonly IGpioPin m_GpioPin = null;
+        readonly GpioPin m_GpioPin = null;
         readonly Models.Components.Output.Subscription.Properties m_SubscriptionProperties;
-        readonly EventCreator m_EventCreator;
+        readonly Models.Components.Output.Properties m_Properties;
 
-        public TheEventConsumer(IGpioPin theGpioPin, Models.Components.Output.Subscription.Properties theSubscriptionProperties, EventCreator theEventCreator )
+        internal Action ReadGpioPin;
+
+        public TheEventConsumer(GpioPin theGpioPin, Models.Components.Output.Subscription.Properties theSubscriptionProperties, Models.Components.Output.Properties theEventCreator )
         {
             m_SubscriptionProperties = theSubscriptionProperties;
-            m_EventCreator = theEventCreator;
+            m_Properties = theEventCreator;
             m_GpioPin = theGpioPin;
         }
 
         public override void OnEvent(Payload thePayload)
         {
-            if (m_EventCreator.isOutput)
+            if (m_Properties.isOutput)
             {
-                var Value = thePayload.Pairs.FirstOrDefault();
+                var Value = thePayload.Subjects.FirstOrDefault();
 
                 if (Value == null)
                 {
@@ -39,9 +39,9 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                     m_GpioPin.Write(false);
                 }
             }
-            else
+            else if(m_Properties.isInput)
             {
-                m_EventCreator.ReadGpioPin();
+                ReadGpioPin?.Invoke();
             }
         }
     }

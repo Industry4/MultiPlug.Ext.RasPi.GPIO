@@ -121,13 +121,22 @@
   <data name="raspberry_pi" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\ViewControllers\Assets\raspberry-pi.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SettingsNavigation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ViewControllers\Settings\SharedRazor\SettingsNavigation.cshtml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
   <data name="SettingsHome" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\ViewControllers\Settings\SettingsHome.cshtml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\ViewControllers\Settings\Home\SettingsHome.cshtml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SettingsSetup" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ViewControllers\Settings\Setup\SettingsSetup.cshtml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="SettingsAbout" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\ViewControllers\Settings\About\SettingsAbout.cshtml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="SettingsSubscriptions" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\ViewControllers\Settings\SettingsSubscriptions.cshtml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\ViewControllers\Settings\Subscriptions\SettingsSubscriptions.cshtml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="SettingsEvent" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\ViewControllers\Settings\SettingsEvent.cshtml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+    <value>..\ViewControllers\Settings\Events\SettingsEvent.cshtml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

@@ -72,15 +72,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\RaspberryPi\EventCreator.cs" />
+    <Compile Include="Components\RaspberryPi\GpioPin.cs" />
     <Compile Include="Components\RaspberryPi\RasPiPin.cs" />
     <Compile Include="Components\RaspberryPi\RaspberryPiComponent.cs" />
     <Compile Include="Components\RaspberryPi\EventConsumer.cs" />
     <Compile Include="Core.cs" />
+    <Compile Include="Models\Apps\Settings\AboutModel.cs" />
     <Compile Include="Models\Apps\Settings\DeleteModel.cs" />
     <Compile Include="Models\Apps\Settings\EventModel.cs" />
     <Compile Include="Models\Apps\Settings\HomeModel.cs" />
     <Compile Include="Models\Apps\Settings\HomePostModel.cs" />
     <Compile Include="Models\Apps\Settings\PinModel.cs" />
+    <Compile Include="Models\Apps\Settings\PinStateModel.cs" />
+    <Compile Include="Models\Apps\Settings\SetupModel.cs" />
     <Compile Include="Models\Apps\Settings\SubscriptionsModel.cs" />
     <Compile Include="Models\Apps\Settings\SubscriptionsPostModel.cs" />
     <Compile Include="Models\Components\Output\Subscription\Properties.cs" />
@@ -98,28 +102,36 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewControllers\Assets\AssetsEndpoint.cs" />
     <Compile Include="ViewControllers\Assets\ImageController.cs" />
+    <Compile Include="ViewControllers\Settings\About\AboutController.cs" />
     <Compile Include="ViewControllers\Settings\SettingsApp.cs" />
-    <Compile Include="ViewControllers\Settings\SettingsDeleteSubscriptionController.cs" />
-    <Compile Include="ViewControllers\Settings\SettingsEventController.cs" />
-    <Compile Include="ViewControllers\Settings\SettingsHomeController.cs" />
-    <Compile Include="ViewControllers\Settings\SettingsSubscriptionsController.cs" />
+    <Compile Include="ViewControllers\Settings\Subscriptions\SettingsDeleteSubscriptionController.cs" />
+    <Compile Include="ViewControllers\Settings\Events\SettingsEventController.cs" />
+    <Compile Include="ViewControllers\Settings\Home\SettingsHomeController.cs" />
+    <Compile Include="ViewControllers\Settings\Subscriptions\SettingsSubscriptionsController.cs" />
+    <Compile Include="ViewControllers\Settings\Setup\SetupController.cs" />
+    <Compile Include="ViewControllers\Settings\SharedRazor\Templates.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="ViewControllers\Settings\SettingsEvent.cshtml" />
-    <None Include="ViewControllers\Settings\SettingsHome.cshtml" />
-    <None Include="ViewControllers\Settings\SettingsSubscriptions.cshtml" />
+    <None Include="ViewControllers\Settings\About\SettingsAbout.cshtml" />
+    <None Include="ViewControllers\Settings\Events\SettingsEvent.cshtml" />
+    <None Include="ViewControllers\Settings\Home\SettingsHome.cshtml" />
+    <None Include="ViewControllers\Settings\Subscriptions\SettingsSubscriptions.cshtml" />
+    <None Include="ViewControllers\Settings\Setup\SettingsSetup.cshtml" />
+    <None Include="ViewControllers\Settings\SharedRazor\SettingsNavigation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="ViewControllers\Assets\raspberry-pi.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

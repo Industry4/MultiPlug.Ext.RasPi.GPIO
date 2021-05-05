@@ -3,8 +3,9 @@ using System.Linq;
 using MultiPlug.Base.Attribute;
 using MultiPlug.Base.Http;
 using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
+using MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.SharedRazor;
 
-namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings
+namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Events
 {
     [Route("event")]
     public class SettingsEventController : SettingsApp
@@ -31,7 +32,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings
             return new Response
             {
                 Model = Model,
-                Template = "GetSettingsEvent"
+                Template = Templates.Event
             };
         }
 
