@@ -3,9 +3,10 @@ using System.Linq;
 using System.Collections.Generic;
 using MultiPlug.Base.Attribute;
 using MultiPlug.Base.Http;
-using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
-using MultiPlug.Ext.RasPi.GPIO.Models.Components.Output.Subscription;
 using MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.SharedRazor;
+using MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi;
+using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
+using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi.Subscription;
 
 namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Subscriptions
 {
@@ -14,12 +15,12 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Subscriptions
     {
         public Response Get( string id )
         {
-            var SearchResults = Core.Instance.RaspberryPi.Outputs.FirstOrDefault(o => string.Equals(o.Properties.BcmPinNumber, id, System.StringComparison.OrdinalIgnoreCase) );
+            RasPiPin SearchResults = Core.Instance.RaspberryPi.GPIO.FirstOrDefault(Pin => string.Equals(Pin.BcmPinNumber, id, System.StringComparison.OrdinalIgnoreCase) );
 
-            var Model = new SubscriptionsModel
+            SubscriptionsModel Model = new SubscriptionsModel
             {
                 WiringPiId = id,
-                Subscriptions = (SearchResults != null) ? SearchResults.Properties.Subscriptions.ToArray() : new Subscription[0],
+                Subscriptions = SearchResults.Subscriptions,
                 KeyIdDefault = "value",
                 HighDefault = "1",
                 LowDefault = "0"
@@ -44,7 +45,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Subscriptions
                 new[] { theModel.SubscriptionHigh.Length, theModel.SubscriptionLow.Length }.All(x => x == theModel.SubscriptionKeyId.Length)
                 )
             {
-                var Subscriptions = new List<Subscription>();
+                var Subscriptions = new List<RasPiPinSubscription>();
 
                 for (int i = 0; i < theModel.SubscriptionGuid.Length; i++)
                 {
@@ -53,20 +54,17 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Subscriptions
                         continue;
                     }
 
-                    Subscriptions.Add(new Subscription
+                    Subscriptions.Add(new RasPiPinSubscription
                     {
                         Guid = (string.IsNullOrEmpty(theModel.SubscriptionGuid[i])) ? Guid.NewGuid().ToString() : theModel.SubscriptionGuid[i],
                         Id = theModel.SubscriptionId[i],
-                        Properties = new Models.Components.Output.Subscription.Properties
-                        {
-                            KeyId = theModel.SubscriptionKeyId[i],
-                            High = theModel.SubscriptionHigh[i],
-                            Low = theModel.SubscriptionLow[i]
-                        }
+                        KeyId = theModel.SubscriptionKeyId[i],
+                        High = theModel.SubscriptionHigh[i],
+                        Low = theModel.SubscriptionLow[i]
                     });
                 }
           
-                Core.Instance.RaspberryPi.Update(theModel.WiringPiId, Subscriptions);
+                Core.Instance.RaspberryPi.Update(theModel.WiringPiId, Subscriptions.ToArray());
             }
 
             return new Response

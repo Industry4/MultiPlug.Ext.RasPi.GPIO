@@ -11,5 +11,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings
         public string Trademark { get; set; }
         public string Version { get; set; }
         public string Log { get; set; }
+        public string WiringPiVersion { get; internal set; }
     }
 }

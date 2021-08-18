@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>MultiPlug.Ext.RasPi.GPIO</id>
-    <version>1.0.12</version>
+    <version>1.0.13</version>
     <title>MultiPlug Raspberry Pi GPIO Extension</title>
     <authors>4IR.UK</authors>
     <owners>4IR.UK</owners>
@@ -12,6 +12,7 @@
     <description>Control the General Purpose Input Output (GPIO) of the Raspberry Pi with this MultiPlug Extension</description>
 	<license type="expression">MIT</license>
     <releaseNotes>Run this extension on a Raspberry Pi only using the .Net Mono runtime.
+1.0.13 Checks that WiringPi is installed and provides a download link if it's not
 1.0.12 Rebuilt due to changes with base classes
 1.0.11 Rebuilt due to changes with base classes
 1.0.10 Applied new Base classes
@@ -33,9 +34,9 @@
     <tags>MultiPlug Edge_Computing Raspberry Pi Raspberry_Pi IoT</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.7.2">
-        <dependency id="MultiPlug.Base" version="1.0.50" />
-        <dependency id="MultiPlug.Extension.Core" version="1.0.59" />
-        <dependency id="MultiPlug.Core" version="2.2.72" />
+        <dependency id="MultiPlug.Base" version="1.0.62" />
+        <dependency id="MultiPlug.Extension.Core" version="1.0.62" />
+        <dependency id="MultiPlug.Core" version="2.2.75" />
       </group>
     </dependencies>
   </metadata>

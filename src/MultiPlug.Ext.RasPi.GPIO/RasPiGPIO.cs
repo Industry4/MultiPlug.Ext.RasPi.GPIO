@@ -1,15 +1,16 @@
-﻿using System;
-
-using MultiPlug.Base.Exchange;
+﻿using MultiPlug.Base.Exchange;
 using MultiPlug.Extension.Core;
 using MultiPlug.Extension.Core.Http;
 
 using MultiPlug.Ext.RasPi.GPIO.Properties;
 using MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi;
 using MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.SharedRazor;
+using MultiPlug.Extension.Core.Attribute;
+using System;
 
 namespace MultiPlug.Ext.RasPi.GPIO
 {
+    [FeatureCanUnload(false)]
     public class RasPiGPIO : MultiPlugExtension
     {
         private Models.Load.Root m_LoadModel = null;
@@ -18,14 +19,15 @@ namespace MultiPlug.Ext.RasPi.GPIO
         {
             Core.Instance.RaspberryPi.SubscriptionsUpdated += OnSubscriptionsUpdated;
             Core.Instance.RaspberryPi.EventsUpdated += OnEventsUpdated;
+            Core.Instance.RaspberryPi.Init(MultiPlugServices);
         }
 
-        private void OnEventsUpdated(object sender, EventArgs e)
+        private void OnEventsUpdated()
         {
             MultiPlugActions.Extension.Updates.Events();
         }
 
-        private void OnSubscriptionsUpdated(object sender, EventArgs e)
+        private void OnSubscriptionsUpdated()
         {
             MultiPlugActions.Extension.Updates.Subscriptions();
         }
@@ -34,7 +36,7 @@ namespace MultiPlug.Ext.RasPi.GPIO
         {
             get
             {
-                return Core.Instance.RaspberryPi.Events.ToArray();
+                return Core.Instance.RaspberryPi.Events;
             }
         }
 
@@ -42,7 +44,7 @@ namespace MultiPlug.Ext.RasPi.GPIO
         {
             get
             {
-                return Core.Instance.RaspberryPi.Subscriptions.ToArray();
+                return Core.Instance.RaspberryPi.Subscriptions;
             }
         }
 
@@ -54,6 +56,7 @@ namespace MultiPlug.Ext.RasPi.GPIO
                 {
                     new RazorTemplate(Templates.Navigation, Resources.SettingsNavigation),
                     new RazorTemplate(Templates.Home, Resources.SettingsHome),
+                    new RazorTemplate(Templates.HomeAlt, Resources.SettingsHomeInstallWiringPi),
                     new RazorTemplate(Templates.Setup, Resources.SettingsSetup),
                     new RazorTemplate(Templates.Event, Resources.SettingsEvent),
                     new RazorTemplate(Templates.Subscriptions, Resources.SettingsSubscriptions),
@@ -67,7 +70,7 @@ namespace MultiPlug.Ext.RasPi.GPIO
             if(m_LoadModel != null)
             {
                 RasPiPin.FireEvents = false;
-                Core.Instance.RaspberryPi.Update(m_LoadModel.RaspberryPi.Outputs);
+                Core.Instance.RaspberryPi.Update(m_LoadModel.RaspberryPi.GPIO);
                 m_LoadModel = null;
                 RasPiPin.FireEvents = true;
             }

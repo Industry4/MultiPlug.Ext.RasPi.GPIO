@@ -10,7 +10,9 @@ namespace MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings
     {
         public string BcmPinNumber { get; set; }
         public bool State { get; set; }
-
         public bool isOutput { get; set; }
+        public string EventId { get; set; }
+        public string EventHigh { get; set; }
+        public string Description { get; set; }
     }
 }

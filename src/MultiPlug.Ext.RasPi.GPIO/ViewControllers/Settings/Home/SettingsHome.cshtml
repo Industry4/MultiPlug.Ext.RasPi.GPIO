@@ -31,63 +31,136 @@
     {
         return PullMode == 2 ? "selected" : string.Empty;
     }
+
+    public static string IOStateClass(bool State)
+    {
+        return State ? "IOStateGreen" : "IOStateRed";
+    }
+
+    public static string IOStateText(bool State)
+    {
+        return State ? "HIGH" : "LOW";
+    }
+
+
 }
 
+<style>
+    .IOState{
+        padding-left: 5px;
+        line-height: 30px;
+        border-left-width: 6px;
+        border-left-style: solid;
+        border-left-color: rgb(204, 204, 204);
+        font-weight: bold;
+    }
+ 
+    .IOStateRed{
+        border-left-color: red;
+    }
+    .IOStateGreen{
+        border-left-color: green;
+    }
+</style>
 
-<section class="row-fluid">
+<form action="" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded">
+    <section class="row-fluid">
 
-    <div class="row-fluid">
-        <div class="box">
-            <div class="span2">
-                <a style="line-height: 52px;" href="#"><img alt="Raspberry Pi Logo" src="@Raw(Model.Context.Paths.Assets)images/raspberry-pi.png"></a>
-            </div>
-            <div class="span8">
-                <p style="font-size:26px; line-height: 54px; text-align: center; margin: 0px;">Raspberry Pi GPIO</p>
-            </div>
-            <div class="span2" style="text-align: right;">
+        <div class="row-fluid">
+            <div class="box">
+                <div class="span2">
+                    <a style="line-height: 52px;" href="#"><img alt="Raspberry Pi Logo" src="@Raw(Model.Context.Paths.Assets)images/raspberry-pi.png"></a>
+                </div>
+                <div class="span8">
+                    <p style="font-size:26px; line-height: 54px; text-align: center; margin: 0px;">Raspberry Pi GPIO</p>
+                </div>
+                <div class="span2" style="text-align: right;">
+                    <button type="submit" value="submit" style="height:54px; width:65px" class="item btn btn-green"><i class="icon-save icon-large"></i><p>Save</p></button>
+                </div>
             </div>
         </div>
-    </div>
 
-    @Include("MultiPlug.Ext.RasPi.GPIO.RaspPiGPIO_Settings_Navigation")
+        @Include("MultiPlug.Ext.RasPi.GPIO.RaspPiGPIO_Settings_Navigation")
 
-    <div class="row-fluid">
-        <div class="box">
-            <p>Special Build</p>
-            <div class="row-fluid">
-                <div class="span2">
-                    <b>BCM Pin</b>
-                </div>
-
-                <div class="span2">
-                    <b>State</b>
-                </div>
-
-                <div class="span2">
-                    <b>Toggle</b>
-                </div>
-            </div>
-
-            @foreach (var Output in @Model.Extension.Model.Outputs)
-{
-                <input type="hidden" name="BcmPinNumber" value="@Output.BcmPinNumber">
+        <div class="row-fluid">
+            <div class="box">
                 <div class="row-fluid">
                     <div class="span2">
-                        @Output.BcmPinNumber
+                        <b>BCM Pin</b>
                     </div>
 
                     <div class="span2">
-                        @Output.State
+                        <b>State</b>
                     </div>
 
                     <div class="span2">
-                    @if (Output.isOutput)
-                    {
-                        <a class="btn btn-black" href="@Raw(Model.Context.Paths.Home)event/?id=@Output.BcmPinNumber"><i class="icon-pencil"></i></a>
-                    }
+                        <b>Toggle</b>
+                    </div>
+                    <div class="span6">
+                        <b>Description</b>
                     </div>
                 </div>
-            }
+
+                @foreach (var Output in @Model.Extension.Model.Outputs)
+    {
+                    <input type="hidden" name="BcmPinNumber" value="@Output.BcmPinNumber">
+                    <div class="row-fluid">
+                        <div class="span2">
+                            @Output.BcmPinNumber
+                        </div>
+
+                        <div class="span2">
+                            <span id="BcmPinNumber-@Output.BcmPinNumber" class="IOState @IOStateClass(Output.State)">@IOStateText(Output.State)</span>
+                        </div>
+
+                        <div class="span2">
+                        @if (Output.isOutput)
+                        {
+                            <a class="btn btn-black doPost" id="HttpToggleOutput-@Output.BcmPinNumber" href="@Raw(Model.Context.Paths.APIs)iostate/@Output.BcmPinNumber"><i class="icon-asterisk"></i></a>
+                        }
+                        </div>
+                        <div class="span6">
+                            <input name="Description" class="input-block-level" type="text" value="@Output.Description">
+                        </div>
+                    </div>
+                }
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+</form>
+<script>
+
+    $.connection.wS.on("Send", function (id, Group) {
+        switch (id) {
+        @foreach (var Output in @Model.Extension.Model.Outputs)
+        {
+            @:case "@Output.EventId":
+            @:  if (Group.Pairs[0].Value == "@Output.EventHigh")
+            @:  {
+            @:      var BcmPinNumberSpan = $("#BcmPinNumber-@Output.BcmPinNumber");
+            @:      BcmPinNumberSpan.text("HIGH");
+            @:      BcmPinNumberSpan.removeClass("IOStateRed");
+            @:      BcmPinNumberSpan.addClass("IOStateGreen");
+            @:  }
+            @:  else
+            @:  {
+            @:      var BcmPinNumberSpan = $("#BcmPinNumber-@Output.BcmPinNumber");
+            @:      BcmPinNumberSpan.text("LOW")
+            @:      BcmPinNumberSpan.removeClass("IOStateGreen");
+            @:      BcmPinNumberSpan.addClass("IOStateRed");
+            @:  }
+            @:  break;
+        }
+            default:
+        }
+    });
+
+    $('.doPost').click(function (e) {
+        e.preventDefault();
+        $.post(this.href, { "io": this.id.replace("HttpToggleOutput-", ""), "state": "t" });
+    });
+
+
+
+
+</script>

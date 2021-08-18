@@ -31,12 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MultiPlug.Base, Version=1.0.53.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MultiPlug.Base.1.0.53\lib\net472\MultiPlug.Base.dll</HintPath>
+    <Reference Include="MultiPlug.Base, Version=1.0.62.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MultiPlug.Base.1.0.62\lib\net472\MultiPlug.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MultiPlug.Extension.Core, Version=1.0.59.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MultiPlug.Extension.Core.1.0.59\lib\net472\MultiPlug.Extension.Core.dll</HintPath>
+    <Reference Include="MultiPlug.Extension.Core, Version=1.0.62.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MultiPlug.Extension.Core.1.0.62\lib\net472\MultiPlug.Extension.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Swan, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -71,27 +71,31 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\RaspberryPi\EventCreator.cs" />
+    <Compile Include="Components\Defaults\DefaultsComponent.cs" />
     <Compile Include="Components\RaspberryPi\GpioPin.cs" />
     <Compile Include="Components\RaspberryPi\RasPiPin.cs" />
     <Compile Include="Components\RaspberryPi\RaspberryPiComponent.cs" />
     <Compile Include="Components\RaspberryPi\EventConsumer.cs" />
     <Compile Include="Core.cs" />
+    <Compile Include="Diagnostics\EventLogDefinitions.cs" />
+    <Compile Include="Diagnostics\EventLogEntryCodes.cs" />
+    <Compile Include="Models\API\Config\IOConfigModel.cs" />
+    <Compile Include="Models\API\IO\IOModel.cs" />
     <Compile Include="Models\Apps\Settings\AboutModel.cs" />
     <Compile Include="Models\Apps\Settings\DeleteModel.cs" />
     <Compile Include="Models\Apps\Settings\EventModel.cs" />
     <Compile Include="Models\Apps\Settings\HomeModel.cs" />
     <Compile Include="Models\Apps\Settings\HomePostModel.cs" />
+    <Compile Include="Models\Apps\Settings\SetupPostModel.cs" />
     <Compile Include="Models\Apps\Settings\PinModel.cs" />
     <Compile Include="Models\Apps\Settings\PinStateModel.cs" />
     <Compile Include="Models\Apps\Settings\SetupModel.cs" />
     <Compile Include="Models\Apps\Settings\SubscriptionsModel.cs" />
     <Compile Include="Models\Apps\Settings\SubscriptionsPostModel.cs" />
-    <Compile Include="Models\Components\Output\Subscription\Properties.cs" />
-    <Compile Include="Models\Components\Output\Subscription\Subscription.cs" />
-    <Compile Include="Models\Components\Output\Properties.cs" />
+    <Compile Include="Models\Components\RaspberryPi\Event\RasPiPinEvent.cs" />
+    <Compile Include="Models\Components\RaspberryPi\Subscription\RasPiPinSubscription.cs" />
+    <Compile Include="Models\Components\RaspberryPi\RasPiPinProperties.cs" />
     <Compile Include="Models\Load\RaspberryPiComponent.cs" />
-    <Compile Include="Models\Load\RasPiPin.cs" />
     <Compile Include="Models\Load\Root.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -100,9 +104,17 @@
     </Compile>
     <Compile Include="RasPiGPIO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\Swan\Definitions.cs" />
+    <Compile Include="Utils\Swan\ProcessResult.cs" />
+    <Compile Include="Utils\Swan\ProcessRunner.cs" />
+    <Compile Include="ViewControllers\API\APIEndpoint.cs" />
+    <Compile Include="ViewControllers\API\Config\IOConfigController.cs" />
+    <Compile Include="ViewControllers\API\IO\IOStateController.cs" />
     <Compile Include="ViewControllers\Assets\AssetsEndpoint.cs" />
+    <Compile Include="ViewControllers\Assets\DownloadsController.cs" />
     <Compile Include="ViewControllers\Assets\ImageController.cs" />
     <Compile Include="ViewControllers\Settings\About\AboutController.cs" />
+    <None Include="ViewControllers\Settings\Home\SettingsHomeInstallWiringPi.cshtml" />
     <Compile Include="ViewControllers\Settings\SettingsApp.cs" />
     <Compile Include="ViewControllers\Settings\Subscriptions\SettingsDeleteSubscriptionController.cs" />
     <Compile Include="ViewControllers\Settings\Events\SettingsEventController.cs" />
@@ -114,6 +126,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="ViewControllers\Assets\wiringpi-latest.deb" />
     <None Include="ViewControllers\Settings\About\SettingsAbout.cshtml" />
     <None Include="ViewControllers\Settings\Events\SettingsEvent.cshtml" />
     <None Include="ViewControllers\Settings\Home\SettingsHome.cshtml" />

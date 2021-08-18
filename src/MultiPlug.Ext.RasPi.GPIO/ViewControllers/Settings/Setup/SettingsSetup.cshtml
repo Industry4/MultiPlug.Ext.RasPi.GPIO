@@ -31,6 +31,21 @@
     {
         return PullMode == 2 ? "selected" : string.Empty;
     }
+
+    public static string IsUnchanged(int Value)
+    {
+        return Value == 0 ? "selected" : string.Empty;
+    }
+
+    public static string IsLow(int Value)
+    {
+        return Value == 3 ? "selected" : string.Empty;
+    }
+
+    public static string IsHigh(int Value)
+    {
+        return Value == 1 ? "selected" : string.Empty;
+    }
 }
 
 <form action="" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded">
@@ -54,7 +69,6 @@
 
         <div class="row-fluid">
             <div class="box">
-                <p>Special Build</p>
                 <div class="row-fluid">
                     <div class="span2">
                         <b>BCM Pin</b>
@@ -118,32 +132,19 @@
 
                         <div class="span2">
                             <select name='InitState' class="input-block-level">
-                                <option value="0" selected>Unchanged</option>
-                                <option value="3">Low</option>
-                                <option value="1">High</option>
+                                <option value="0" @IsUnchanged(Output.InitState)>Unchanged</option>
+                                <option value="3" @IsLow(Output.InitState)>Low</option>
+                                <option value="1" @IsHigh(Output.InitState)>High</option>
                             </select>
                         </div>
 
                         <div class="span2">
                             <select name='ShutdownState' class="input-block-level">
-                                <option value="0" selected>Unchanged</option>
-                                <option value="3">Low</option>
-                                <option value="1">High</option>
+                                <option value="0" @IsUnchanged(Output.ShutdownState)>Unchanged</option>
+                                <option value="3" @IsLow(Output.ShutdownState)>Low</option>
+                                <option value="1" @IsHigh(Output.ShutdownState)>High</option>
                             </select>
                         </div>
-
-
-
-
-
-
-                        @*<div class="span3">
-                                <input name="" disabled class="input-block-level" type="text" value="@Output.EventId">
-                            </div>
-
-                            <div class="span2">
-                                <input name="" disabled class="input-block-level" type="text" value="@Output.EventDescription">
-                            </div>*@
 
                         <div class="span1">
                             <a class="btn btn-black" href="@Raw(Model.Context.Paths.Home)event/?id=@Output.BcmPinNumber"><i class="icon-pencil"></i></a>

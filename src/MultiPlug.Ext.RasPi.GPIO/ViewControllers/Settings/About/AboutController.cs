@@ -26,7 +26,8 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.About
                     Copyright = ExecutingAssembly.GetCustomAttribute<AssemblyCopyrightAttribute>().Copyright,
                     Trademark = ExecutingAssembly.GetCustomAttribute<AssemblyTrademarkAttribute>().Trademark,
                     Version = ExecutingAssembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version,
-                    Log = string.Empty
+                    Log = string.Join("\r", Core.Instance.RaspberryPi.LoggingService.Read()),
+                    WiringPiVersion = Core.Instance.RaspberryPi.GPIOVersion
                 }
             };
         }

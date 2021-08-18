@@ -19,5 +19,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings
         public string SubscriptionsCount { get; set; }
         public string EventId { get; set; }
         public string EventDescription { get; set; }
+        public int InitState { get; set; }
+        public int ShutdownState { get; set; }
     }
 }

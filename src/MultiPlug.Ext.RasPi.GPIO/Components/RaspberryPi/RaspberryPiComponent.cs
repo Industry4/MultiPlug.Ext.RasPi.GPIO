@@ -3,80 +3,131 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
+using System.Threading.Tasks;
 using Unosquare.RaspberryIO;
 using Unosquare.RaspberryIO.Abstractions;
 using Unosquare.WiringPi;
+using MultiPlug.Base.Exchange.API;
+using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
+using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi.Subscription;
+using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi;
+using MultiPlug.Ext.RasPi.GPIO.Diagnostics;
+using MultiPlug.Ext.RasPi.GPIO.Utils.Swan;
 
 namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 {
     public class RaspberryPiComponent
     {
-        public event EventHandler SubscriptionsUpdated;
-        public event EventHandler EventsUpdated;
+        public ILoggingService LoggingService { get; private set; }
+
+        public event Action SubscriptionsUpdated;
+        public event Action EventsUpdated;
 
         [DataMember]
-        public List<RasPiPin> Outputs { get; } = new List<RasPiPin>();
+        public RasPiPin[] GPIO { get; set; } = new RasPiPin[0];
 
-        public bool PlatformSupported { get; set; } = true;
+        internal bool PlatformSupported { get; private set; } = true;
+        internal bool WiringPiInstalled { get; private set; } = true;
+
+        private const string c_GPIOVersionDefault = "Unknown";
+
+        internal string GPIOVersion { get; private set; } = c_GPIOVersionDefault;
+
+
 
         public RaspberryPiComponent()
         {
+        }
+
+        internal void Init(IMultiPlugServices theMultiPlugServices)
+        {
+            theMultiPlugServices.Logging.RegisterDefinitions(EventLogDefinitions.DefinitionsId, EventLogDefinitions.Definitions, true);
+
+            LoggingService = theMultiPlugServices.Logging.New("RasPiGPIO", EventLogDefinitions.DefinitionsId);
+
             if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Unosquare.WiringPi.dll")))
             {
-                LogException(new Exception("Missing file: Unosquare.WiringPi.dll"));
+                LoggingService.WriteEntry((uint)EventLogEntryCodes.MissingDllUnosquareWiringPi);
                 return;
             }
 
             if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Unosquare.RaspberryIO.dll")))
             {
-                LogException(new Exception("Missing file: Unosquare.RaspberryIO.dll"));
+                LoggingService.WriteEntry((uint)EventLogEntryCodes.MissingDllUnosquareRaspberryIO);
                 return;
             }
 
             if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Unosquare.Raspberry.Abstractions.dll")))
             {
-                LogException(new Exception("Missing file: Unosquare.Raspberry.Abstractions.dll"));
+                LoggingService.WriteEntry((uint)EventLogEntryCodes.MissingDllUnosquareRaspberryAbstractions);
                 return;
             }
 
             if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Swan.Lite.dll")))
             {
-                LogException(new Exception("Missing file: Swan.Lite.dll"));
+                LoggingService.WriteEntry((uint)EventLogEntryCodes.MissingDllSwanLite);
                 return;
             }
 
             if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Swan.dll")))
             {
-                LogException(new Exception("Missing file: Swan.dll"));
+                LoggingService.WriteEntry((uint)EventLogEntryCodes.MissingDllSwan);
+                return;
+            }
+
+            Task<ProcessResult> VersionNumberTask = ProcessRunner.GetProcessResultAsync("gpio", "-v");
+
+            try
+            {
+                VersionNumberTask.Wait();
+            }
+            catch
+            {
+                LoggingService.WriteEntry((uint)EventLogEntryCodes.MissingWiringPiLib);
+                WiringPiInstalled = false;
+                return;
+            }
+
+            if (VersionNumberTask.Result.Okay())
+            {
+                GPIOVersion = VersionNumberTask.Result.GetOutput().Split('\n')[0].Split(':')[1].Trim();
+            }
+
+            if (GPIOVersion != "2.52")
+            {
+                LoggingService.WriteEntry((uint)EventLogEntryCodes.MissingWiringPiLib);
+                WiringPiInstalled = false;
                 return;
             }
 
             try
             {
                 Pi.Init<BootstrapWiringPi>();
-                Init();
+                InitPins();
             }
             catch (PlatformNotSupportedException)
             {
+                LoggingService.WriteEntry((uint)EventLogEntryCodes.PlatformNotSupportedException);
                 PlatformSupported = false;
             }
             catch (Exception theException)
             {
-                LogException(theException);
+                LoggingService.WriteEntry((uint)EventLogEntryCodes.GenericExceptionLib, theException.Message, theException.InnerException != null ? theException.InnerException.Message : string.Empty);
             }
         }
         
         public void Shutdown()
         {
-            foreach (var output in Outputs)
+            foreach (var output in GPIO)
             {
-                output.shutdown();
+                output.Shutdown();
             }
         }
 
-        private void Init()
+        private void InitPins()
         {
+            List<RasPiPin> Pins = new List<RasPiPin>();
+
             try
             {
                 foreach ( IGpioPin pin in Pi.Gpio )
@@ -96,144 +147,100 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                     if (pin.Header == GpioHeader.P1 )
                     {
                         var RasPiPin = new RasPiPin(pin);
+                        RasPiPin.Log += OnLogWriteEntry;
                         RasPiPin.SubscriptionsUpdated += OnSubscriptionsUpdated;
                         RasPiPin.EventUpdated += OnEventUpdated;
-                        Outputs.Add(RasPiPin);
+                        Pins.Add(RasPiPin);
                     }
                 }
             }
             catch (Exception theException)
             {
-                LogException(theException);
+                LoggingService.WriteEntry((uint)EventLogEntryCodes.GenericExceptionLib, theException.Message, theException.InnerException != null ? theException.InnerException.Message : string.Empty);
             }
+
+            GPIO = Pins.ToArray();
         }
 
-        private void LogException(Exception theException)
+        private void OnLogWriteEntry(EventLogEntryCodes theLogCode, string[] theArg)
         {
-            var ErrorFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.txt");
-
-            using (StreamWriter Writer = new StreamWriter(ErrorFilePath, true))
-            {
-                Writer.WriteLine("Message: " + theException.Message);
-                Writer.WriteLine("Stacktrace: " + theException.StackTrace);
-
-                if(theException.InnerException != null)
-                {
-                    Writer.WriteLine("Inner Message: " + theException.InnerException.Message);
-                    Writer.WriteLine("Inner Stacktrace: " + theException.InnerException.StackTrace);
-                }
-
-                Writer.WriteLine(Environment.NewLine + "-----------------------------------------------------------------------------" + Environment.NewLine);
-            }
+            LoggingService.WriteEntry((uint)theLogCode, theArg);
         }
-
-        internal void Update(Models.Load.RasPiPin[] thePins)
-        {
-            if ( thePins == null)
-            {
-                return;
-            }
-            EnableUpdateEvents(false);
-
-            foreach ( var LoadedPin in thePins)
-            {
-                if ( LoadedPin.Properties.BcmPinNumber == null)
-                {
-                    continue;
-                }
-
-                var OutputSearch = Outputs.FirstOrDefault(o => o.Properties.BcmPinNumber == LoadedPin.Properties.BcmPinNumber);
-
-                if (OutputSearch != null)
-                {
-                    OutputSearch.Update(LoadedPin.Properties);
-                }
-            }
-
-            EnableUpdateEvents(true);
-        }
-
 
         internal void Update(EventModel theModel)
         {
-            var OutputSearch = Outputs.FirstOrDefault(o => o.Properties.BcmPinNumber == theModel.BcmPinNumber);
+            RasPiPin PinSearch = GPIO.FirstOrDefault(Pin => Pin.BcmPinNumber == theModel.BcmPinNumber);
 
-            if (OutputSearch != null)
+            if (PinSearch != null)
             {
-                OutputSearch.Update(theModel);
+                PinSearch.Update(theModel);
             }
         }
-        private void OnEventUpdated(object sender, EventArgs e)
+
+        internal void Update(HomePostModel theModel)
         {
-            EventsUpdated?.Invoke(this, EventArgs.Empty);
-        }
-
-        private void OnSubscriptionsUpdated(object sender, EventArgs e)
-        {
-            if(m_UpdatesEnabled)
+            for (int Index = 0; Index < theModel.BcmPinNumber.Length; Index++)
             {
-                SubscriptionsUpdated?.Invoke(this, EventArgs.Empty);
-            }
-            else
-            {
-                m_UpdatesBuffered = true;
-            }
+                RasPiPin PinSearch = GPIO.FirstOrDefault(Pin => Pin.BcmPinNumber == theModel.BcmPinNumber[Index]);
 
-        }
-
-        private bool m_UpdatesEnabled = true;
-        private bool m_UpdatesBuffered = false;
-
-        private void EnableUpdateEvents( bool isTrue )
-        {
-            if( isTrue )
-            {
-                if( m_UpdatesBuffered )
+                if (PinSearch != null)
                 {
-                    SubscriptionsUpdated?.Invoke(this, EventArgs.Empty);
-                    m_UpdatesBuffered = false;
+                    PinSearch.Update(theModel.Description[Index]);
                 }
-
             }
-
-            m_UpdatesEnabled = isTrue;
         }
 
+        private void OnEventUpdated()
+        {
+            EventsUpdated?.Invoke();
+        }
+
+        private void OnSubscriptionsUpdated()
+        {
+            SubscriptionsUpdated?.Invoke();
+        }
 
         /// <summary>
         /// Updates or Adds to the Subscriptions of a Pin
         /// </summary>
         /// <param name="theBcmPinNumber"></param>
         /// <param name="theSubscriptions"></param>
-        internal void Update(string theBcmPinNumber, List<Models.Components.Output.Subscription.Subscription> theSubscriptions)
+        internal void Update(string theBcmPinNumber, RasPiPinSubscription[] theSubscriptions)
         {
-            EnableUpdateEvents(false);
+            RasPiPin PinSearch = GPIO.FirstOrDefault(Pin => Pin.BcmPinNumber == theBcmPinNumber);
 
-            var OutputSearch = Outputs.FirstOrDefault(o => o.Properties.BcmPinNumber == theBcmPinNumber);
-
-            if ( OutputSearch != null)
+            if ( PinSearch != null)
             {
-                OutputSearch.Update(theSubscriptions);
+                PinSearch.Update(theSubscriptions);
             }
-
-            EnableUpdateEvents(true);
         }
 
-        internal void Update(Models.Components.Output.Properties[] theProperties)
+        internal void Update(RasPiPinProperties[] theProperties)
         {
-            EnableUpdateEvents(false);
-
-            foreach ( var Property in theProperties)
+            Console.WriteLine("Updating");
+            try
             {
-                var OutputSearch = Outputs.FirstOrDefault(o => o.Properties.BcmPinNumber == Property.BcmPinNumber);
-
-                if (OutputSearch != null)
+                if (theProperties == null)
                 {
-                    OutputSearch.Update(Property);
+                    return;
+                }
+
+                foreach (var Property in theProperties)
+                {
+                    RasPiPin PinSearch = GPIO.FirstOrDefault(Pin => Pin.BcmPinNumber == Property.BcmPinNumber);
+
+                    if (PinSearch != null)
+                    {
+                        PinSearch.Update(Property);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.Message);
+            }
 
-            EnableUpdateEvents(true);
+            Console.WriteLine("Updating complete");
         }
 
         /// <summary>
@@ -243,29 +250,29 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
         /// <param name="theSubscriptionGuid"></param>
         internal void Remove(string theBcmPinNumber, string theSubscriptionGuid)
         {
-            var OutputSearch = Outputs.FirstOrDefault(o => o.Properties.BcmPinNumber == theBcmPinNumber);
+            RasPiPin PinSearch = GPIO.FirstOrDefault(Pin => Pin.BcmPinNumber == theBcmPinNumber);
 
-            if (OutputSearch != null)
+            if (PinSearch != null)
             {
-                OutputSearch.Remove(theSubscriptionGuid);
+                PinSearch.Remove(theSubscriptionGuid);
             }
         }
 
-        public List<Base.Exchange.Subscription> Subscriptions
+        public Base.Exchange.Subscription[] Subscriptions
         {
             get
             {
-                var list = new List<Base.Exchange.Subscription>();
-                Outputs.ForEach(o => list.AddRange(o.Properties.Subscriptions));
-                return list;
+                List<Base.Exchange.Subscription> List = new List<Base.Exchange.Subscription>();
+                Array.ForEach(GPIO, Pin => List.AddRange(Pin.Subscriptions));
+                return List.ToArray();
             }
         }
 
-        public List<Base.Exchange.Event> Events
+        public Base.Exchange.Event[] Events
         {
             get
             {
-                return Outputs.Where(o => o.Properties.Output == "false" ).Select( o => o.Properties.Event).ToList();
+                return GPIO.Select( Pin => Pin.Event).ToArray();
             }
         }
     }

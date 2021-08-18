@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Linq;
 using MultiPlug.Base.Exchange;
+using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi.Subscription;
+using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi;
 
 namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 {
     class TheEventConsumer : EventConsumer
     {
         readonly GpioPin m_GpioPin = null;
-        readonly Models.Components.Output.Subscription.Properties m_SubscriptionProperties;
-        readonly Models.Components.Output.Properties m_Properties;
+        readonly RasPiPinSubscription m_Subscription;
+        readonly RasPiPinProperties m_Properties;
 
         internal Action ReadGpioPin;
 
-        public TheEventConsumer(GpioPin theGpioPin, Models.Components.Output.Subscription.Properties theSubscriptionProperties, Models.Components.Output.Properties theEventCreator )
+        public TheEventConsumer(GpioPin theGpioPin, RasPiPinSubscription theSubscription, RasPiPinProperties theProperties )
         {
-            m_SubscriptionProperties = theSubscriptionProperties;
-            m_Properties = theEventCreator;
+            m_Subscription = theSubscription;
+            m_Properties = theProperties;
             m_GpioPin = theGpioPin;
         }
 
@@ -30,11 +32,11 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                     return;
                 }
 
-                if (string.Equals(Value.Value, m_SubscriptionProperties.High, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(Value.Value, m_Subscription.High, StringComparison.OrdinalIgnoreCase))
                 {
                     m_GpioPin.Write(true);
                 }
-                else if (string.Equals(Value.Value, m_SubscriptionProperties.Low, StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(Value.Value, m_Subscription.Low, StringComparison.OrdinalIgnoreCase))
                 {
                     m_GpioPin.Write(false);
                 }

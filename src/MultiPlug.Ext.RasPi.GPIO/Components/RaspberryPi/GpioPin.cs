@@ -7,6 +7,9 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
     {
         readonly IGpioPin m_GpioPin;
 
+        internal Action StateChange;
+
+
         public GpioPin(IGpioPin theGpioPin)
         {
             m_GpioPin = theGpioPin;
@@ -53,8 +56,13 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 
         internal void Write(bool value)
         {
-            LastValue = value;
             m_GpioPin.Write(value);
+
+            if(LastValue != value )
+            {
+                LastValue = value;
+                StateChange?.Invoke();
+            }
         }
     }
 }

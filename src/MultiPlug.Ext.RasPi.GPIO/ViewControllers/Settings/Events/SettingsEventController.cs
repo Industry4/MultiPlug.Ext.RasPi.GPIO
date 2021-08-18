@@ -4,6 +4,7 @@ using MultiPlug.Base.Attribute;
 using MultiPlug.Base.Http;
 using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
 using MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.SharedRazor;
+using MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi;
 
 namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Events
 {
@@ -12,21 +13,21 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Events
     {
         public Response Get(string id)
         {
-            var SearchResults = Core.Instance.RaspberryPi.Outputs.FirstOrDefault(o => string.Equals(o.Properties.BcmPinNumber, id, System.StringComparison.OrdinalIgnoreCase));
+            RasPiPin SearchResults = Core.Instance.RaspberryPi.GPIO.FirstOrDefault(Pin => string.Equals(Pin.BcmPinNumber, id, System.StringComparison.OrdinalIgnoreCase));
 
             if (SearchResults == null)
             {
                 return null;
             }
 
-            var Model = new Models.Apps.Settings.EventModel
+            EventModel Model = new EventModel
             {
                 BcmPinNumber = id,
-                Id = SearchResults.Properties.Event.Id,
-                Description = SearchResults.Properties.Event.Description,
-                High = SearchResults.Properties.EventHigh,
-                Low = SearchResults.Properties.EventLow,
-                Key = SearchResults.Properties.EventKey
+                Id = SearchResults.Event.Id,
+                Description = SearchResults.Event.Description,
+                High = SearchResults.Event.HighValue,
+                Low = SearchResults.Event.LowValue,
+                Key = SearchResults.Event.Subjects[0]
             };
 
             return new Response

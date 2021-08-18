@@ -5,3 +5,6 @@
 /src/MultiPlug.Ext.RasPi.GPIO/bin
 /src/MultiPlug.Ext.RasPi.GPIO/obj
 /src/.vs/config/applicationhost.config
+/src/.vs/MultiPlug.Ext.RasPi.GPIO/v14/.suo
+/src/packages
+/src/MultiPlug.Ext.RasPi.GPIO/MultiPlug.Ext.RasPi.GPIO.csproj.user

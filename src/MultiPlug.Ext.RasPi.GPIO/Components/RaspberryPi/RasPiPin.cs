@@ -1,60 +1,79 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using Unosquare.RaspberryIO.Abstractions;
 
 using MultiPlug.Base.Exchange;
 using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
-using MultiPlug.Ext.RasPi.GPIO.Models.Components.Output.Subscription;
+using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi;
+using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi.Subscription;
+using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi.Event;
 
 namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 {
-    public class RasPiPin
+    public class RasPiPin : RasPiPinProperties
     {
         private GpioPin m_GpioPin = null;
 
-        public event EventHandler SubscriptionsUpdated;
-        public event EventHandler EventUpdated;
+        public event Action SubscriptionsUpdated;
+        public event Action EventUpdated;
 
         internal static bool FireEvents = false;
         private bool m_FireEvents = true;
+        private bool InitStateSet = false;
 
-        [DataMember]
-        public Models.Components.Output.Properties Properties { private set; get; } = new Models.Components.Output.Properties();
+        internal event Action<Diagnostics.EventLogEntryCodes, string[]> Log;
 
         public bool CurrentState { get { return m_GpioPin.LastValue; } }
+
+        public void SetState(bool theState)
+        {
+            m_GpioPin.Write(theState);
+        }
 
         public RasPiPin(IGpioPin theGpioPin )
         {
             m_GpioPin = new GpioPin( theGpioPin );
+            m_GpioPin.StateChange += new Action(OnPinWrite);
 
             var NewEventGuid = Guid.NewGuid().ToString();
-            Properties.Event = new Base.Exchange.Event { Guid = NewEventGuid, Id = NewEventGuid, Description = "BCM Pin: " + theGpioPin.BcmPinNumber.ToString() };
-            Properties.Event.CachedPayload = new Func<Payload>(CachedValue);
+            Event = new RasPiPinEvent { Guid = NewEventGuid, Id = NewEventGuid, Description = "BCM Pin: " + theGpioPin.BcmPinNumber.ToString(), Subjects = new string[] { "value" } };
+            Event.CachedPayload = new Func<Payload>(CreateGroupData);
 
+            BcmPinNumber = theGpioPin.BcmPinNumber.ToString();
+        }
 
-            Properties.BcmPinNumber = theGpioPin.BcmPinNumber.ToString();
+        private void OnPinWrite()
+        {
+            if (m_GpioPin.LastValue)
+            {
+                Log?.Invoke(Diagnostics.EventLogEntryCodes.PinOutHigh, new string[] { BcmPinNumber });
+            }
+            else
+            {
+                Log?.Invoke(Diagnostics.EventLogEntryCodes.PinOutLow, new string[] { BcmPinNumber });
+            }
 
+            Event.Fire(CreateGroupData());
         }
 
         private void SetOutput(string theValue)    // Using String to use Empty as a unset value
         {
-            Properties.Output = theValue;
+            Output = theValue;
             try
             {
                 if (!string.IsNullOrEmpty(theValue))
                 {
 
                     SuppressEvents();
-                    if (string.Equals(theValue, "true", StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(theValue, c_True, StringComparison.OrdinalIgnoreCase))
                     {
                         m_GpioPin.PinMode = GpioPinDriveMode.Output;
                     }
                     else
                     {
                         m_GpioPin.PinMode = GpioPinDriveMode.Input;
-                        m_GpioPin.InputPullMode = (GpioPinResistorPullMode)Properties.PullMode;
+                        m_GpioPin.InputPullMode = (GpioPinResistorPullMode)PullMode;
 
                         m_GpioPin.Read();
 
@@ -65,25 +84,42 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception theException)
             {
-                Console.WriteLine("Exception " + e.Message);
+                Log?.Invoke(Diagnostics.EventLogEntryCodes.GenericExceptionGPIO, new string[] { theException.Message, theException.InnerException != null ? theException.InnerException.Message : string.Empty });
             }
         }
 
-        public void shutdown()
+        private void Init()
         {
+            if (!InitStateSet)
+            {
+                InitStateSet = true;
 
+                if (isOutput && InitState != 0)
+                {
+                    m_GpioPin.Write(InitState == 1 ? true : false);
+                }
+            }
+        }
+
+
+        internal void Shutdown()
+        {
+            if( isOutput && ShutdownState != 0)
+            {
+                m_GpioPin.Write(ShutdownState == 1 ? true : false);
+            }
         }
 
         private void SetPullMode(int theMode)
         {
-            Properties.PullMode = theMode;
+            PullMode = theMode;
 
-            if (Properties.Output == "false")
+            if (Output == c_False)
             {
                 SuppressEvents();
-                m_GpioPin.InputPullMode = (GpioPinResistorPullMode)Properties.PullMode;
+                m_GpioPin.InputPullMode = (GpioPinResistorPullMode)PullMode;
 
             }
         }
@@ -99,50 +135,65 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 
         private void ReadGpioPin()
         {
-            if (FireEvents && m_FireEvents && Properties.Output == "false")
-            {
-                bool LastOutputState = m_GpioPin.LastValue;
-                bool CurrentPinState = m_GpioPin.Read();
+            bool LastOutputState = m_GpioPin.LastValue;
+            bool CurrentPinState = m_GpioPin.Read();
 
+            if (FireEvents && m_FireEvents && Output == c_False)
+            {
                 if (CurrentPinState != LastOutputState)
                 {
-                    Console.WriteLine(DateTime.Now.ToString("h:mm:ss") + "[I/O] IN [Bcm Pin] " + m_GpioPin.BcmPinNumber + (CurrentPinState ? " [state] High" : " [state] Low"));
+                    if (CurrentPinState)
+                    {
+                        Log?.Invoke(Diagnostics.EventLogEntryCodes.PinInHigh, new string[] { BcmPinNumber });
+                    }
+                    else
+                    {
+                        Log?.Invoke(Diagnostics.EventLogEntryCodes.PinInLow, new string[] { BcmPinNumber });
+                    }
 
-                    Properties.Event.Fire(CreateGroupData());
+                    Event.Fire(CreateGroupData());
                 }
+            }
+            else
+            {
+                Console.WriteLine(DateTime.Now.ToString("ReadGpioPin() Suppressed"));
             }
         }
 
         private Payload CreateGroupData()
         {
-            return new Payload(Properties.Event.Id, new PayloadSubject[] { new PayloadSubject(Properties.EventKey, m_GpioPin.LastValue ? Properties.EventHigh : Properties.EventLow) });
+            return new Payload(Event.Id, new PayloadSubject[] { new PayloadSubject(Event.Subjects[0], m_GpioPin.LastValue ? Event.HighValue : Event.LowValue) });
         }
 
-        private Payload CachedValue()
+        internal void Update(string theDescription)
         {
-            return new Payload(Properties.Event.Id, new PayloadSubject[] { new PayloadSubject(Properties.EventKey, m_GpioPin.LastValue ? Properties.EventHigh : Properties.EventLow) });
+            if( theDescription != Event.Description)
+            {
+                Event.Description = theDescription;
+                EventUpdated?.Invoke();
+            }
         }
 
-        internal void Update (Models.Components.Output.Properties theUpdatedProperties)
+        internal void Update (RasPiPinProperties theUpdatedProperties)
         {
-            if( Properties.Output != theUpdatedProperties.Output)
+            if( Output != theUpdatedProperties.Output)
             {
                 SetOutput(theUpdatedProperties.Output);
             }
 
-            if( Properties.PullMode != theUpdatedProperties.PullMode)
+            if( PullMode != theUpdatedProperties.PullMode)
             {
                 SetPullMode(theUpdatedProperties.PullMode);
             }
 
-            if ( Properties.InitState != theUpdatedProperties.InitState )
+            if ( InitState != theUpdatedProperties.InitState )
             {
-                Properties.InitState = theUpdatedProperties.InitState;
+                InitState = theUpdatedProperties.InitState;
             }
 
-            if( Properties.ShutdownState != theUpdatedProperties.ShutdownState)
+            if( ShutdownState != theUpdatedProperties.ShutdownState)
             {
-                Properties.ShutdownState = theUpdatedProperties.ShutdownState;
+                ShutdownState = theUpdatedProperties.ShutdownState;
             }
 
             if(theUpdatedProperties.Event != null)
@@ -152,11 +203,13 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                     BcmPinNumber = theUpdatedProperties.BcmPinNumber,
                     Id = theUpdatedProperties.Event.Id,
                     Description = theUpdatedProperties.Event.Description,
-                    Key = theUpdatedProperties.EventKey,
-                    High = theUpdatedProperties.EventHigh,
-                    Low = theUpdatedProperties.EventLow
+                    Key = theUpdatedProperties.Event.Subjects[0],
+                    High = theUpdatedProperties.Event.HighValue,
+                    Low = theUpdatedProperties.Event.LowValue
                 });
             }
+
+            Init();
 
             if( theUpdatedProperties.Subscriptions != null)
             {
@@ -164,27 +217,37 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             }
         }
 
-        internal void Update(List<Models.Components.Output.Subscription.Subscription> theSubscriptions)
+        internal void Update(RasPiPinSubscription[] theSubscriptions)
         {
-            var NewSubscriptions = new List<Models.Components.Output.Subscription.Subscription>();
+            var NewSubscriptions = new List<RasPiPinSubscription>();
 
             bool SubscriptionChanged = false;
 
             foreach (var Subscription in theSubscriptions)
             {
-                var SubSearch = Properties.Subscriptions.FirstOrDefault(s => s.Guid == Subscription.Guid);
+                var SubSearch = Subscriptions.FirstOrDefault(s => s.Guid == Subscription.Guid);
 
                 if (SubSearch == null)
                 {
-                    TheEventConsumer EventConsumer = new TheEventConsumer(m_GpioPin, Subscription.Properties, Properties);
+                    TheEventConsumer EventConsumer = new TheEventConsumer(m_GpioPin, Subscription, this);
 
                     EventConsumer.ReadGpioPin = new Action(ReadGpioPin);
 
                     Subscription.EventConsumer = EventConsumer;
 
-                    if (Subscription.Properties == null) // TODO Temp
+                    if (Subscription.High == null) // TODO Temp
                     {
-                    Subscription.Properties = new Models.Components.Output.Subscription.Properties { High = "1", Low = "0", KeyId = "value" };
+                        Subscription.High = "1";
+                    }
+
+                    if (Subscription.Low == null) // TODO Temp
+                    {
+                        Subscription.Low = "0";
+                    }
+
+                    if (Subscription.KeyId == null) // TODO Temp
+                    {
+                        Subscription.KeyId = "value";
                     }
 
                     NewSubscriptions.Add(Subscription);
@@ -197,57 +260,66 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                         SubscriptionChanged = true;
                     }
 
-                    SubSearch.Properties.KeyId = Subscription.Properties.KeyId;
-                    SubSearch.Properties.High = Subscription.Properties.High;
-                    SubSearch.Properties.Low = Subscription.Properties.Low;
+                    SubSearch.KeyId = Subscription.KeyId;
+                    SubSearch.High = Subscription.High;
+                    SubSearch.Low = Subscription.Low;
                 }
             }
 
             if( NewSubscriptions.Any())
             {
-                Properties.Subscriptions.AddRange(NewSubscriptions);
+                List<RasPiPinSubscription> CurrentSubscriptions = new List<RasPiPinSubscription>(Subscriptions);
+                CurrentSubscriptions.AddRange(NewSubscriptions);
+                Subscriptions = CurrentSubscriptions.ToArray();
                 SubscriptionChanged = true;
             }
 
             if( SubscriptionChanged )
             {
-                SubscriptionsUpdated?.Invoke(this, EventArgs.Empty);
+                SubscriptionsUpdated?.Invoke();
             }
         }
 
         internal void Update(EventModel theModel)
         {
-            Properties.EventKey = theModel.Key;
-            Properties.EventHigh = theModel.High;
-            Properties.EventLow = theModel.Low;
+            Event.HighValue = theModel.High;
+            Event.LowValue = theModel.Low;
 
             bool EventChanged = false;
 
-            if( Properties.Event.Id != theModel.Id)
+            if(Event.Subjects[0] != theModel.Key)
             {
-                Properties.Event.Id = theModel.Id;
-                EventChanged = true;
-            }
-            if( Properties.Event.Description != theModel.Description)
-            {
-                Properties.Event.Description = theModel.Description;
+                Event.Subjects[0] = theModel.Key;
                 EventChanged = true;
             }
 
-            if( EventChanged && Properties.Output == "false")
+            if( Event.Id != theModel.Id)
             {
-                EventUpdated?.Invoke(this, EventArgs.Empty);
+                Event.Id = theModel.Id;
+                EventChanged = true;
+            }
+            if( Event.Description != theModel.Description)
+            {
+                Event.Description = theModel.Description;
+                EventChanged = true;
+            }
+
+            if( EventChanged && Output == c_False)
+            {
+                EventUpdated?.Invoke();
             }
         }
 
         internal void Remove(string theSubscriptionGuid)
         {
-            var SearchSubscription = Properties.Subscriptions.FirstOrDefault(s => s.Guid == theSubscriptionGuid);
+            var SearchSubscription = Subscriptions.FirstOrDefault(Subscription => Subscription.Guid == theSubscriptionGuid);
 
             if (SearchSubscription != null)
             {
-                Properties.Subscriptions.Remove(SearchSubscription);
-                SubscriptionsUpdated?.Invoke(this, EventArgs.Empty);
+                List<RasPiPinSubscription> CurrentSubscriptions = new List<RasPiPinSubscription>(Subscriptions);
+                CurrentSubscriptions.Remove(SearchSubscription);
+                Subscriptions = CurrentSubscriptions.ToArray();
+                SubscriptionsUpdated?.Invoke();
             }
         }
     }

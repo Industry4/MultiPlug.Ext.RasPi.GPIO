@@ -143,6 +143,36 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to @model MultiPlug.Base.Http.EdgeApp
+        ///
+        ///@functions {
+        ///
+        ///    public static string IsUnset(string Output)
+        ///    {
+        ///        return Output == &quot;&quot; ? &quot;selected&quot; : string.Empty;
+        ///    }
+        ///
+        ///    public static string IsOutput(string Output)
+        ///    {
+        ///        return Output == &quot;true&quot; ? &quot;selected&quot; : string.Empty;
+        ///    }
+        ///
+        ///    public static string IsInput(string Output)
+        ///    {
+        ///        return Output == &quot;false&quot; ? &quot;selected&quot; : string.Empty;
+        ///    }
+        ///
+        ///    public static string PullModeOff(int PullMode)
+        ///    {
+        ///        return PullM [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SettingsHomeInstallWiringPi {
+            get {
+                return ResourceManager.GetString("SettingsHomeInstallWiringPi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to @model MultiPlug.Base.Http.EdgeApp
         ///@functions {
         ///    public string NavLocationIsHome()
         ///    {
@@ -211,6 +241,16 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         internal static string SettingsSubscriptions {
             get {
                 return ResourceManager.GetString("SettingsSubscriptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] wiringpi_latest {
+            get {
+                object obj = ResourceManager.GetObject("wiringpi_latest", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

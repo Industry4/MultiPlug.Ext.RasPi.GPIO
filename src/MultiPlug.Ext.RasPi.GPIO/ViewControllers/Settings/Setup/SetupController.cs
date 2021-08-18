@@ -6,6 +6,7 @@ using MultiPlug.Base.Attribute;
 using MultiPlug.Base.Http;
 using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
 using MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.SharedRazor;
+using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi;
 
 namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Setup
 {
@@ -18,24 +19,26 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Setup
             {
                 Model = new HomeModel
                 {
-                    Outputs = Core.Instance.RaspberryPi.Outputs.Select(Output => new PinModel
+                    Outputs = Core.Instance.RaspberryPi.GPIO.Select(Pin => new PinModel
                     {
-                        BcmPinNumber = Output.Properties.BcmPinNumber,
-                        EventHigh = Output.Properties.EventHigh,
-                        EventKey = Output.Properties.EventKey,
-                        EventLow = Output.Properties.EventLow,
-                        Output = Output.Properties.Output,
-                        PullMode = Output.Properties.PullMode,
-                        SubscriptionsCount = Output.Properties.Subscriptions.Count.ToString(),
-                        EventId = Output.Properties.Event.Id,
-                        EventDescription = Output.Properties.Event.Description
+                        BcmPinNumber = Pin.BcmPinNumber,
+                        EventHigh = Pin.Event.HighValue,
+                        EventKey = Pin.Event.Subjects[0],
+                        EventLow = Pin.Event.LowValue,
+                        Output = Pin.Output,
+                        PullMode = Pin.PullMode,
+                        SubscriptionsCount = Pin.Subscriptions.Length.ToString(),
+                        EventId = Pin.Event.Id,
+                        EventDescription = Pin.Event.Description,
+                        InitState = Pin.InitState,
+                        ShutdownState = Pin.ShutdownState,
                     }).ToArray()
                 },
                 Template = Templates.Setup
             };
         }
 
-        public Response Post(HomePostModel theModel)
+        public Response Post(SetupPostModel theModel)
         {
             if (theModel != null &&
                 theModel.BcmPinNumber != null &&
@@ -53,11 +56,11 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Setup
                 }.All(x => x == theModel.BcmPinNumber.Length)
                 )
             {
-                var Properties = new List<Models.Components.Output.Properties>();
+                var Properties = new List<RasPiPinProperties>();
 
                 for (int i = 0; i < theModel.BcmPinNumber.Length; i++)
                 {
-                    Properties.Add(new Models.Components.Output.Properties
+                    Properties.Add(new RasPiPinProperties
                     {
                         BcmPinNumber = theModel.BcmPinNumber[i],
                         Output = theModel.IsOutput[i],
