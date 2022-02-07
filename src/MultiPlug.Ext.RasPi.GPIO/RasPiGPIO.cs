@@ -70,6 +70,7 @@ namespace MultiPlug.Ext.RasPi.GPIO
             if(m_LoadModel != null)
             {
                 RasPiPin.FireEvents = false;
+                Core.Instance.RaspberryPi.LoggingLevel = m_LoadModel.RaspberryPi.LoggingLevel;
                 Core.Instance.RaspberryPi.Update(m_LoadModel.RaspberryPi.GPIO);
                 m_LoadModel = null;
                 RasPiPin.FireEvents = true;

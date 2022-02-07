@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 
 using MultiPlug.Base.Attribute;
 using MultiPlug.Base.Http;
@@ -27,8 +28,20 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.About
                     Trademark = ExecutingAssembly.GetCustomAttribute<AssemblyTrademarkAttribute>().Trademark,
                     Version = ExecutingAssembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version,
                     Log = string.Join("\r", Core.Instance.RaspberryPi.LoggingService.Read()),
-                    WiringPiVersion = Core.Instance.RaspberryPi.GPIOVersion
+                    WiringPiVersion = Core.Instance.RaspberryPi.GPIOVersion,
+                    LoggingLevel = Core.Instance.RaspberryPi.LoggingLevel
                 }
+            };
+        }
+
+        public Response Post(AboutPostModel theModel)
+        {
+            Core.Instance.RaspberryPi.LoggingLevel = theModel.LoggingLevel;
+
+            return new Response
+            {
+                StatusCode = System.Net.HttpStatusCode.Moved,
+                Location = new Uri(Context.Request.AbsoluteUri)
             };
         }
     }

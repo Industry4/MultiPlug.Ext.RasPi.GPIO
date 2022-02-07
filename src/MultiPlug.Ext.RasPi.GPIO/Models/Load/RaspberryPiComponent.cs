@@ -7,5 +7,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Models.Load
     {
         [DataMember]
         public RasPiPinProperties[] GPIO { get; set; }
+        [DataMember]
+        public int LoggingLevel { get; set; }
     }
 }

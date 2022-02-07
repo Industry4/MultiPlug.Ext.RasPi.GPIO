@@ -33,6 +33,9 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 
         internal string GPIOVersion { get; private set; } = c_GPIOVersionDefault;
 
+        [DataMember]
+        public int LoggingLevel { get; set; }
+
 
 
         public RaspberryPiComponent()
@@ -164,7 +167,10 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 
         private void OnLogWriteEntry(EventLogEntryCodes theLogCode, string[] theArg)
         {
-            LoggingService.WriteEntry((uint)theLogCode, theArg);
+            if( LoggingLevel > 0)
+            {
+                LoggingService.WriteEntry((uint)theLogCode, theArg);
+            }
         }
 
         internal void Update(EventModel theModel)

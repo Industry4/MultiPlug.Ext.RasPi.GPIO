@@ -17,9 +17,11 @@ The Extension can be installed using the in-built MultiPlug installer located at
 Or sideloaded by downloading [multiplug.ext.raspi.gpio.nupkg](https://www.nuget.org/api/v2/package/MultiPlug.Ext.RasPi.GPIO/)
 
 ## Runtime
-### Screenshot
-
-![Image of MultiPlug.Ext.RasPi.Config](https://raw.githubusercontent.com/Industry4/MultiPlug.Ext.RasPi.GPIO/master/media/multiplug-ext-raspi-gpio.png)
+### Screenshots
+#### Setup
+![Image of MultiPlug.Ext.RasPi.Config Setup](https://raw.githubusercontent.com/Industry4/MultiPlug.Ext.RasPi.GPIO/master/media/multiplug-ext-raspi-gpio.png)
+#### Monitoring
+![Image of MultiPlug.Ext.RasPi.Config Monitoring](https://raw.githubusercontent.com/Industry4/MultiPlug.Ext.RasPi.GPIO/master/media/multiplug-ext-raspi-gpio2.png)
 
 ### Application
 
@@ -30,10 +32,6 @@ The Extension can be accessed from: [http://multiplug.local/extensions/multiplug
 
 * Read or Write to the GPIO pins, which will trigger MultiPlug Events on Read, and write on a subscription change.
 * Set Pin pull up or pull down settings.
-
-
-### Known Bugs
-* The use of the native GPIO libary results in a slow timed-out shutdown.
 
 ## Authors
 
