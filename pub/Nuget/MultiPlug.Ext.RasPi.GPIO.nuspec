@@ -35,7 +35,7 @@ https://github.com/Industry4/MultiPlug.Ext.RasPi.GPIO/issues/1
 * Known Bug: Due to the use of a external unmanaged library, error messages may occur on MultiPlug shutdown, however the shutdown will complete successfully.
 
 1.0.0 Nuget name reserve.</releaseNotes>
-    <copyright>4IR.UK British Systems 2021</copyright>
+    <copyright>4IR.UK British Systems 2022</copyright>
     <tags>MultiPlug Edge_Computing Raspberry Pi Raspberry_Pi IoT</tags>
     <dependencies>
       <group targetFramework=".NETFramework4.7.2">
