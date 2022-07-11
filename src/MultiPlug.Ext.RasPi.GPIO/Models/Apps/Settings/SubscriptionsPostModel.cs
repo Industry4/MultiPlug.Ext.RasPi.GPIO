@@ -6,7 +6,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings
         public string WiringPiId { get; set; }
         public string[] SubscriptionGuid { get; set; }
         public string[] SubscriptionId { get; set; }
-        public string[] SubscriptionKeyId { get; set; }
         public string[] SubscriptionHigh { get; set; }
         public string[] SubscriptionLow { get; set; }
     }

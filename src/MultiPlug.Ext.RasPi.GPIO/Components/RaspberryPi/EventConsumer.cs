@@ -6,44 +6,47 @@ using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi;
 
 namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 {
-    class TheEventConsumer : EventConsumer
+    internal class TheEventConsumer
     {
         readonly GpioPin m_GpioPin = null;
         readonly RasPiPinSubscription m_Subscription;
         readonly RasPiPinProperties m_Properties;
 
-        internal Action ReadGpioPin;
+        readonly Action m_ReadGpioPin;
 
-        public TheEventConsumer(GpioPin theGpioPin, RasPiPinSubscription theSubscription, RasPiPinProperties theProperties )
+        internal TheEventConsumer(GpioPin theGpioPin, RasPiPinSubscription theSubscription, RasPiPinProperties theProperties, Action theAction )
         {
             m_Subscription = theSubscription;
             m_Properties = theProperties;
             m_GpioPin = theGpioPin;
+            m_ReadGpioPin = theAction;
+            m_Subscription.Event += OnEvent;
         }
 
-        public override void OnEvent(Payload thePayload)
+        private void OnEvent(SubscriptionEvent obj)
         {
             if (m_Properties.isOutput)
             {
-                var Value = thePayload.Subjects.FirstOrDefault();
+                foreach( var Value in obj.PayloadSubjects)
+                {
+                    if (Value == null)
+                    {
+                        return;
+                    }
 
-                if (Value == null)
-                {
-                    return;
-                }
-
-                if (string.Equals(Value.Value, m_Subscription.High, StringComparison.OrdinalIgnoreCase))
-                {
-                    m_GpioPin.Write(true);
-                }
-                else if (string.Equals(Value.Value, m_Subscription.Low, StringComparison.OrdinalIgnoreCase))
-                {
-                    m_GpioPin.Write(false);
+                    if (string.Equals(Value.Value, m_Subscription.High, StringComparison.OrdinalIgnoreCase))
+                    {
+                        m_GpioPin.Write(true);
+                    }
+                    else if (string.Equals(Value.Value, m_Subscription.Low, StringComparison.OrdinalIgnoreCase))
+                    {
+                        m_GpioPin.Write(false);
+                    }
                 }
             }
-            else if(m_Properties.isInput)
+            else if (m_Properties.isInput)
             {
-                ReadGpioPin?.Invoke();
+                m_ReadGpioPin?.Invoke();
             }
         }
     }

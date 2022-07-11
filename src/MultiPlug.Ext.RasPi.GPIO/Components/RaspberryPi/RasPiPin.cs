@@ -54,7 +54,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                 Log?.Invoke(Diagnostics.EventLogEntryCodes.PinOutLow, new string[] { BcmPinNumber });
             }
 
-            Event.Fire(CreateGroupData());
+            Event.Invoke(CreateGroupData());
         }
 
         private void SetOutput(string theValue)    // Using String to use Empty as a unset value
@@ -151,7 +151,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                         Log?.Invoke(Diagnostics.EventLogEntryCodes.PinInLow, new string[] { BcmPinNumber });
                     }
 
-                    Event.Fire(CreateGroupData());
+                    Event.Invoke(CreateGroupData());
                 }
             }
             else
@@ -229,25 +229,16 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 
                 if (SubSearch == null)
                 {
-                    TheEventConsumer EventConsumer = new TheEventConsumer(m_GpioPin, Subscription, this);
+                    TheEventConsumer EventConsumer = new TheEventConsumer(m_GpioPin, Subscription, this, new Action(ReadGpioPin));
 
-                    EventConsumer.ReadGpioPin = new Action(ReadGpioPin);
-
-                    Subscription.EventConsumer = EventConsumer;
-
-                    if (Subscription.High == null) // TODO Temp
+                    if (string.IsNullOrEmpty(Subscription.High))
                     {
                         Subscription.High = "1";
                     }
 
-                    if (Subscription.Low == null) // TODO Temp
+                    if (string.IsNullOrEmpty(Subscription.Low))
                     {
                         Subscription.Low = "0";
-                    }
-
-                    if (Subscription.KeyId == null) // TODO Temp
-                    {
-                        Subscription.KeyId = "value";
                     }
 
                     NewSubscriptions.Add(Subscription);
@@ -260,7 +251,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                         SubscriptionChanged = true;
                     }
 
-                    SubSearch.KeyId = Subscription.KeyId;
                     SubSearch.High = Subscription.High;
                     SubSearch.Low = Subscription.Low;
                 }

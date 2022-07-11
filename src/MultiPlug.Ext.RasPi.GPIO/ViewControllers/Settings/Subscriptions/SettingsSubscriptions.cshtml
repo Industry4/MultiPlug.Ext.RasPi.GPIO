@@ -1,6 +1,6 @@
 ﻿@model MultiPlug.Base.Http.EdgeApp
 
-<form action="" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded">
+<form action="" method="post" accept-charset="utf-8" enctype="application/x-www-form-urlencoded" autocomplete="off">
     <section class="row-fluid">
 
         <div class="row-fluid">
@@ -28,12 +28,8 @@
                         <div class="span1">
                         </div>
 
-                        <div class="span5">
+                        <div class="span7">
                             <b>Subscription</b>
-                        </div>
-
-                        <div class="span2">
-                            <b>Key</b>
                         </div>
 
                         <div class="span2">
@@ -56,12 +52,9 @@
                                             <div class="span1">
                                                 <button value="@Subscription.Guid" type="button" class="item btn btn-red delete-sub"><i class="icon-trash icon-large"></i></button>
                                             </div>
-                                            <div class="span5">
+                                            <div class="span7">
                                                 <input type="hidden" name="subscriptionguid" value="@Subscription.Guid">
                                                 <input name="SubscriptionId" class="input-block-level mp-event-picker" type="text" value="@Subscription.Id" />
-                                            </div>
-                                            <div class="span2">
-                                                <input name="SubscriptionKeyId" class="input-block-level" type="text" value="@Subscription.KeyId">
                                             </div>
                                             <div class="span2">
                                                 <input name="SubscriptionHigh" class="input-block-level" type="text" value="@Subscription.High">
@@ -116,12 +109,9 @@
                         <div class="controls">\
                             <div class="span1">\
                             </div>\
-                            <div class="span5">\
+                            <div class="span7">\
                                 <input type="hidden" name="subscriptionguid" value="">\
                                 <input name="SubscriptionId" class="input-block-level mp-event-picker" type="text" value="" />\
-                            </div>\
-                            <div class="span2">\
-                                <input name="SubscriptionKeyId" class="input-block-level" type="text" value="@Model.Extension.Model.KeyIdDefault">\
                             </div>\
                             <div class="span2">\
                                 <input name="SubscriptionHigh" class="input-block-level" type="text" value="@Model.Extension.Model.HighDefault">\

@@ -40,9 +40,8 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Subscriptions
                 theModel.SubscriptionGuid != null &&
                 theModel.SubscriptionHigh != null &&
                 theModel.SubscriptionId != null &&
-                theModel.SubscriptionKeyId != null &&
                 theModel.SubscriptionLow != null &&
-                new[] { theModel.SubscriptionHigh.Length, theModel.SubscriptionLow.Length }.All(x => x == theModel.SubscriptionKeyId.Length)
+                theModel.SubscriptionHigh.Length == theModel.SubscriptionLow.Length
                 )
             {
                 var Subscriptions = new List<RasPiPinSubscription>();
@@ -58,7 +57,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Subscriptions
                     {
                         Guid = (string.IsNullOrEmpty(theModel.SubscriptionGuid[i])) ? Guid.NewGuid().ToString() : theModel.SubscriptionGuid[i],
                         Id = theModel.SubscriptionId[i],
-                        KeyId = theModel.SubscriptionKeyId[i],
                         High = theModel.SubscriptionHigh[i],
                         Low = theModel.SubscriptionLow[i]
                     });
