@@ -44,7 +44,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Events
             return new Response
             {
                 StatusCode = System.Net.HttpStatusCode.Moved,
-                Location = new Uri(Context.Request.AbsoluteUri.Replace(Context.Request.PathAndQuery, "") + string.Join("", Context.Referrer.Segments.Take(Context.Referrer.Segments.Length - 1)))
+                Location = new Uri(Context.Request.AbsoluteUri.Replace(Context.Request.PathAndQuery, "") + string.Join("", Context.Referrer.Segments.Take(Context.Referrer.Segments.Length - 1) ) + "setup/" )
             };
         }
     }
