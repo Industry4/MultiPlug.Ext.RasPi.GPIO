@@ -23,11 +23,11 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Events
             EventModel Model = new EventModel
             {
                 BcmPinNumber = id,
-                Id = SearchResults.Event.Id,
-                Description = SearchResults.Event.Description,
+                EventId = SearchResults.Event.Id,
+                EventDescription = SearchResults.Event.Description,
                 High = SearchResults.Event.HighValue,
                 Low = SearchResults.Event.LowValue,
-                Key = SearchResults.Event.Subjects[0]
+                Subject = SearchResults.Event.Subjects[0]
             };
 
             return new Response

@@ -201,9 +201,9 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                 Update( new EventModel
                 {
                     BcmPinNumber = theUpdatedProperties.BcmPinNumber,
-                    Id = theUpdatedProperties.Event.Id,
-                    Description = theUpdatedProperties.Event.Description,
-                    Key = theUpdatedProperties.Event.Subjects[0],
+                    EventId = theUpdatedProperties.Event.Id,
+                    EventDescription = theUpdatedProperties.Event.Description,
+                    Subject = theUpdatedProperties.Event.Subjects[0],
                     High = theUpdatedProperties.Event.HighValue,
                     Low = theUpdatedProperties.Event.LowValue
                 });
@@ -277,20 +277,20 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 
             bool EventChanged = false;
 
-            if(Event.Subjects[0] != theModel.Key)
+            if(Event.Subjects[0] != theModel.Subject)
             {
-                Event.Subjects[0] = theModel.Key;
+                Event.Subjects[0] = theModel.Subject;
                 EventChanged = true;
             }
 
-            if( Event.Id != theModel.Id)
+            if ( Event.Id != theModel.EventId)
             {
-                Event.Id = theModel.Id;
+                Event.Id = theModel.EventId;
                 EventChanged = true;
             }
-            if( Event.Description != theModel.Description)
+            if( Event.Description != theModel.EventDescription)
             {
-                Event.Description = theModel.Description;
+                Event.Description = theModel.EventDescription;
                 EventChanged = true;
             }
 
