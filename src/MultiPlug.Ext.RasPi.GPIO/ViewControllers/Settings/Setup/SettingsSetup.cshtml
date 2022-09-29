@@ -70,7 +70,7 @@
         <div class="row-fluid">
             <div class="box">
                 <div class="row-fluid">
-                    <div class="span2">
+                    <div class="span1">
                         <b>BCM Pin</b>
                     </div>
 
@@ -91,6 +91,10 @@
                     </div>
 
                     <div class="span1">
+                        <b>Debounce</b>
+                    </div>
+
+                    <div class="span1">
                         <b>Event</b>
                     </div>
                     <div class="span1">
@@ -102,7 +106,7 @@
                 {
                     <input type="hidden" name="BcmPinNumber" value="@Output.BcmPinNumber">
                     <div class="row-fluid">
-                        <div class="span2">
+                        <div class="span1">
                             @Output.BcmPinNumber
                         </div>
 
@@ -144,6 +148,10 @@
                                 <option value="3" @IsLow(Output.ShutdownState)>Low</option>
                                 <option value="1" @IsHigh(Output.ShutdownState)>High</option>
                             </select>
+                        </div>
+
+                        <div class="span1">
+                            <input name="Debounce" class="input-block-level" type="number" min="0" step="1" max="1000" value="@Output.Debounce" >
                         </div>
 
                         <div class="span1">

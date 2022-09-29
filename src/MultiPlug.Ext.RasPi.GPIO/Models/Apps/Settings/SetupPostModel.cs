@@ -7,5 +7,6 @@
         public int[] PullMode { get; set; }
         public int[] InitState { get; set; }
         public int[] ShutdownState { get; set; }
+        public int[] Debounce { get; set; }
     }
 }

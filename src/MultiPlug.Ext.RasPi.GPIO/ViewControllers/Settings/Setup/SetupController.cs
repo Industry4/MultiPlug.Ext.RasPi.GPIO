@@ -32,6 +32,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Setup
                         EventDescription = Pin.Event.Description,
                         InitState = Pin.InitState,
                         ShutdownState = Pin.ShutdownState,
+                        Debounce = Pin.Debounce.Value
                     }).ToArray()
                 },
                 Template = Templates.Setup
@@ -46,13 +47,15 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Setup
                 theModel.PullMode != null &&
                 theModel.InitState != null &&
                 theModel.ShutdownState != null &&
+                theModel.Debounce != null &&
                 new[]
                 {
                     theModel.BcmPinNumber.Length,
                     theModel.IsOutput.Length,
                     theModel.PullMode.Length,
                     theModel.InitState.Length,
-                    theModel.ShutdownState.Length
+                    theModel.ShutdownState.Length,
+                    theModel.Debounce.Length
                 }.All(x => x == theModel.BcmPinNumber.Length)
                 )
             {
@@ -66,7 +69,8 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Setup
                         Output = theModel.IsOutput[i],
                         PullMode = theModel.PullMode[i],
                         InitState = theModel.InitState[i],
-                        ShutdownState = theModel.ShutdownState[i]
+                        ShutdownState = theModel.ShutdownState[i],
+                        Debounce = theModel.Debounce[i]
                     });
                 }
 

@@ -20,6 +20,8 @@ namespace MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi
         [DataMember]
         public int ShutdownState { get; set; } = 0;
         [DataMember]
+        public int? Debounce { get; set; }
+        [DataMember]
         public RasPiPinEvent Event { get; set; }
         [DataMember]
         public RasPiPinSubscription[] Subscriptions { set; get; } = new RasPiPinSubscription[0];
