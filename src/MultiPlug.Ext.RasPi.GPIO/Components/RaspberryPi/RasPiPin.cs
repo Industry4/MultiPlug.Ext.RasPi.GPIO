@@ -137,57 +137,58 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 
         private void InterruptHandler()
         {
-            if(!m_Debouncing)
+            if (m_Debouncing)
             {
-                if (!m_GpioPin.LastValue && Debounce.Value > 0 )   // Going High so Debounce
+                return;
+            }
+
+            if ( Debounce.Value > 0 )
+            {
+                m_Debouncing = true;
+                Task.Run(async delegate
                 {
-                    m_Debouncing = true;
-                    Task.Run(async delegate
+                    bool LastValue = m_GpioPin.LastValue;
+
+                    bool ValuePrevious = m_GpioPin.Read();
+
+                    bool DoubleChecked = false;   // Check one more time for good measure
+
+                    int DebouceDelay = Debounce.Value;
+
+                    while ( true )
                     {
-                        bool LastValue = m_GpioPin.LastValue;
+                        await Task.Delay(DebouceDelay);
 
-                        bool ValuePrevious = m_GpioPin.Read();
+                        bool ValueNow = m_GpioPin.Read();
 
-                        bool DoubleCheck = false;   // Check one more time for good measure
-
-                        while ( true )
+                        if (ValueNow == ValuePrevious)
                         {
-                            await Task.Delay(Debounce.Value);
-
-                            bool ValueNow = m_GpioPin.Read();
-
-                            if (ValueNow == ValuePrevious)
+                            if(DoubleChecked)
                             {
-                                if(DoubleCheck)
-                                {
-                                    ValuePrevious = ValueNow;
-                                    break;
-                                }
-                                else
-                                {
-                                    DoubleCheck = true;
-                                }
+                                ValuePrevious = ValueNow;
+                                break;
                             }
                             else
                             {
-                                DoubleCheck = false;
+                                DebouceDelay = 10;
+                                DoubleChecked = true;
                             }
-
-                            ValuePrevious = ValueNow;
+                        }
+                        else
+                        {
+                            DoubleChecked = false;
                         }
 
-                        InvokeEvent(LastValue, ValuePrevious);
-                        m_Debouncing = false;
-                    });
-                }
-                else
-                {
-                    InvokeEvent(m_GpioPin.LastValue, m_GpioPin.Read());
-                }
+                        ValuePrevious = ValueNow;
+                    }
+
+                    InvokeEvent(LastValue, ValuePrevious);
+                    m_Debouncing = false;
+                });
             }
             else
             {
-                return;
+                InvokeEvent(m_GpioPin.LastValue, m_GpioPin.Read());
             }
         }
 
