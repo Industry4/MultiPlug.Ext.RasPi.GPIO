@@ -1,5 +1,5 @@
 # MultiPlug.Ext.RasPi.GPIO
-Raspberry Pi GPIO Extension for the [MultiPlug](https://www.multiplug.app/) MultiPlug .Net Edge Computing Platform
+Raspberry Pi GPIO Extension for the [MultiPlug](https://www.multiplug.app/) .Net Edge Computing Platform
 
 ## Getting Started
 
