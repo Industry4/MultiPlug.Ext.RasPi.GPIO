@@ -9,7 +9,7 @@ These instructions will guide you the installation of the Extension on an instan
 
 Install the MultiPlug Edge Computing Platform on Raspberry Pi OS (Debian Linux). [MultiPlug Installation Instructions](https://apt.multiplug.app/)
 
-## Linux Support
+### Linux Support
 
 * Bullseye (Debian 11)
 * Bookworm (Debian 12)
