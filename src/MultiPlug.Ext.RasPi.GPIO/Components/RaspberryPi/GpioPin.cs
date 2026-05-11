@@ -1,16 +1,17 @@
 ﻿using System;
+using MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi;
 using Unosquare.RaspberryIO.Abstractions;
 
 namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 {
     internal class GpioPin
     {
-        readonly IGpioPin m_GpioPin;
+        readonly IGpioPinV2 m_GpioPin;
 
         internal Action StateChange;
 
 
-        public GpioPin(IGpioPin theGpioPin)
+        public GpioPin(IGpioPinV2 theGpioPin)
         {
             m_GpioPin = theGpioPin;
         }
@@ -41,7 +42,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             }
         }
 
-        internal bool LastValue { get; private set; }
+        internal bool LastValue { get; set; }
 
         internal bool Read()
         {
@@ -52,6 +53,17 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
         internal void RegisterInterruptCallback(EdgeDetection edgeDetection, Action callback)
         {
             m_GpioPin.RegisterInterruptCallback(edgeDetection, callback);
+        }
+
+
+        internal void RegisterInterruptCallback(EdgeDetection edgeDetection, ulong debounceperiod)
+        {
+            m_GpioPin.RegisterInterruptCallback(edgeDetection, debounceperiod);
+        }
+
+        internal void RemoveInterruptCallback()
+        {
+            m_GpioPin.RemoveInterruptCallback();
         }
 
         internal void Write(bool value)

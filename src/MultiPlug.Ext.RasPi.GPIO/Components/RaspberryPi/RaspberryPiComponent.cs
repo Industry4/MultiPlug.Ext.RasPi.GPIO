@@ -6,13 +6,15 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Unosquare.RaspberryIO;
 using Unosquare.RaspberryIO.Abstractions;
-using Unosquare.WiringPi;
 using MultiPlug.Base.Exchange.API;
-using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
-using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi.Subscription;
-using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi;
 using MultiPlug.Ext.RasPi.GPIO.Diagnostics;
+using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
+using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi;
+using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi.Subscription;
 using MultiPlug.Ext.RasPi.GPIO.Utils.Swan;
+using MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi;
+using MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Resources;
+using MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Native;
 
 namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 {
@@ -28,6 +30,8 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 
         internal bool PlatformSupported { get; private set; } = true;
         internal bool WiringPiInstalled { get; private set; } = true;
+        internal bool OSRaspbianBullseye { get; private set; }
+        internal bool RestartMultiPlug { get; set; }
 
         private const string c_GPIOVersionDefault = "Unknown";
 
@@ -47,12 +51,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             theMultiPlugServices.Logging.RegisterDefinitions(EventLogDefinitions.DefinitionsId, EventLogDefinitions.Definitions, true);
 
             LoggingService = theMultiPlugServices.Logging.New("RasPiGPIO", EventLogDefinitions.DefinitionsId);
-
-            if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Unosquare.WiringPi.dll")))
-            {
-                LoggingService.WriteEntry((uint)EventLogEntryCodes.MissingDllUnosquareWiringPi);
-                return;
-            }
 
             if (!File.Exists(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Unosquare.RaspberryIO.dll")))
             {
@@ -78,6 +76,24 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                 return;
             }
 
+            Task<ProcessResult> OSVersionTask = ProcessRunner.GetProcessResultAsync("lsb_release", "-d");
+
+            try
+            {
+                OSVersionTask.Wait();
+            }
+            catch
+            {
+            }
+
+            if (OSVersionTask.Result.Okay())
+            {
+                if(OSVersionTask.Result.GetOutput().Contains("bullseye"))
+                {
+                    OSRaspbianBullseye = true;
+                }
+            }
+
             Task<ProcessResult> VersionNumberTask = ProcessRunner.GetProcessResultAsync("gpio", "-v");
 
             try
@@ -96,7 +112,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                 GPIOVersion = VersionNumberTask.Result.GetOutput().Split('\n')[0].Split(':')[1].Trim();
             }
 
-            if (GPIOVersion != "2.52")
+            if (GPIOVersion != "3.18")
             {
                 LoggingService.WriteEntry((uint)EventLogEntryCodes.MissingWiringPiLib);
                 WiringPiInstalled = false;
@@ -119,7 +135,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             }
         }
         
-        public void Shutdown()
+        internal void Shutdown()
         {
             foreach (var output in GPIO)
             {
@@ -131,9 +147,11 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
         {
             List<RasPiPin> Pins = new List<RasPiPin>();
 
+            Utils.WiringPi.GpioPin.RegisteredInterruptCallbackSingleton(InterruptCallbackSingleton);
+
             try
             {
-                foreach ( IGpioPin pin in Pi.Gpio )
+                foreach ( IGpioPinV2 pin in Pi.Gpio )
                 {
                     if( pin.BcmPinNumber == 0 ||    // EEPROM
                         pin.BcmPinNumber == 1 ||    // EEPROM
@@ -150,7 +168,8 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                     if (pin.Header == GpioHeader.P1 )
                     {
                         var RasPiPin = new RasPiPin(pin);
-                        RasPiPin.Log += OnLogWriteEntry;
+                        RasPiPin.LogVerbose += OnLogWriteEntryVerbose;
+                        RasPiPin.LogError += OnLogWriteEntryError;
                         RasPiPin.SubscriptionsUpdated += OnSubscriptionsUpdated;
                         RasPiPin.EventUpdated += OnEventUpdated;
                         Pins.Add(RasPiPin);
@@ -165,12 +184,34 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             GPIO = Pins.ToArray();
         }
 
-        private void OnLogWriteEntry(EventLogEntryCodes theLogCode, string[] theArg)
+        private void InterruptCallbackSingleton(WPIWfiStatus thewfiStatus)
         {
-            if( LoggingLevel > 0)
+            Task.Run(() =>
+            {
+                var wfiStatus = thewfiStatus;
+
+                foreach (var Pin in Core.Instance.RaspberryPi.GPIO)
+                {
+                    if (Pin.PinNumber == wfiStatus.pinBCM)
+                    {
+                        Pin.OnInputChange(wfiStatus.edge);
+                        break;
+                    }
+                }
+            });
+        }
+
+        private void OnLogWriteEntryVerbose(EventLogEntryCodes theLogCode, string[] theArg)
+        {
+            if( LoggingLevel > 1) // Verbose
             {
                 LoggingService.WriteEntry((uint)theLogCode, theArg);
             }
+        }
+
+        private void OnLogWriteEntryError(EventLogEntryCodes theLogCode, string[] theArg)
+        {
+            LoggingService.WriteEntry((uint)theLogCode, theArg);
         }
 
         internal void Update(EventModel theModel)
@@ -223,7 +264,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 
         internal void Update(RasPiPinProperties[] theProperties)
         {
-            Console.WriteLine("Updating");
             try
             {
                 if (theProperties == null)
@@ -245,8 +285,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             {
                 Console.WriteLine("Exception: " + ex.Message);
             }
-
-            Console.WriteLine("Updating complete");
         }
 
         /// <summary>
@@ -262,6 +300,38 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             {
                 PinSearch.Remove(theSubscriptionGuid);
             }
+        }
+
+        /// <summary>
+        /// Installs the Debian package
+        /// </summary>
+        /// <returns></returns>
+        internal string InstallLibrary()
+        {
+            EmbeddedResources.ExtractDebLirary();
+
+            string Result = null;
+            try
+            {
+                var Task = ProcessRunner.GetProcessResultAsync("apt-get", "-qq install /usr/local/bin/multiplug/extensions/MultiPlug.Ext.RasPi.GPIO/wiringpi_3.18_armhf.deb");
+                Task.Wait();
+
+                if (!Task.Result.Okay())
+                {
+                    Result = Task.Result.StandardError;
+                }
+            }
+            catch (Exception ex)
+            {
+                Result = ex.Message;
+            }
+
+            if(Result == null)
+            {
+                Core.Instance.RaspberryPi.RestartMultiPlug = true;
+            }
+
+            return Result;
         }
 
         public Base.Exchange.Subscription[] Subscriptions

@@ -7,7 +7,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Diagnostics
         SourceWiringPi = 1,
         SourceGPIO = 2,
 
-        MissingDllUnosquareWiringPi = 50,
+        MissingDllUnosquareWiringPi = 50, // No Longer Used
         MissingDllUnosquareRaspberryIO = 51,
         MissingDllUnosquareRaspberryAbstractions = 52,
         MissingDllSwanLite = 53,
@@ -21,5 +21,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Diagnostics
         PinInLow = 72,
         PinInHigh = 73,
         GenericExceptionGPIO = 74,
+        PinDisabled = 75,
     }
 }

@@ -6,7 +6,6 @@ using MultiPlug.Ext.RasPi.GPIO.Properties;
 using MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi;
 using MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.SharedRazor;
 using MultiPlug.Extension.Core.Attribute;
-using System;
 
 namespace MultiPlug.Ext.RasPi.GPIO
 {
@@ -69,11 +68,14 @@ namespace MultiPlug.Ext.RasPi.GPIO
         {
             if(m_LoadModel != null)
             {
-                RasPiPin.FireEvents = false;
-                Core.Instance.RaspberryPi.LoggingLevel = m_LoadModel.RaspberryPi.LoggingLevel;
-                Core.Instance.RaspberryPi.Update(m_LoadModel.RaspberryPi.GPIO);
-                m_LoadModel = null;
-                RasPiPin.FireEvents = true;
+                if (Core.Instance.RaspberryPi.WiringPiInstalled) // Prevents the loading of the Settings, and Loss of them if WiringPi is not installed.
+                {
+                    RasPiPin.FireEvents = false;
+                    Core.Instance.RaspberryPi.LoggingLevel = m_LoadModel.RaspberryPi.LoggingLevel;
+                    Core.Instance.RaspberryPi.Update(m_LoadModel.RaspberryPi.GPIO);
+                    m_LoadModel = null;
+                    RasPiPin.FireEvents = true;
+                }
             }
         }
 
@@ -89,7 +91,14 @@ namespace MultiPlug.Ext.RasPi.GPIO
 
         public override object Save()
         {
-            return Core.Instance;
+            if (Core.Instance.RaspberryPi.WiringPiInstalled)
+            {
+                return Core.Instance;
+            }
+            else
+            {
+                return m_LoadModel; // Prevent Loss of Settings if WiringPi is not installed
+            }
         }
 
         public override void Start()

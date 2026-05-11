@@ -26,6 +26,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Diagnostics
             new EventLogDefinition { Code = (uint) EventLogEntryCodes.PinOutLow,                                Source = (uint) EventLogEntryCodes.SourceGPIO,  StringFormat = "OUT BCM Pin: {0} State: LOW",                               Type = EventLogEntryType.Information },
             new EventLogDefinition { Code = (uint) EventLogEntryCodes.PinOutHigh,                               Source = (uint) EventLogEntryCodes.SourceGPIO,  StringFormat = "OUT BCM Pin: {0} State: HIGH",                              Type = EventLogEntryType.Information },
             new EventLogDefinition { Code = (uint) EventLogEntryCodes.GenericExceptionGPIO,                      Source = (uint) EventLogEntryCodes.SourceGPIO,  StringFormat = "Exception Message: {0} Inner Message: {1}",                Type = EventLogEntryType.Error },
+            new EventLogDefinition { Code = (uint) EventLogEntryCodes.PinDisabled,                              Source = (uint) EventLogEntryCodes.SourceGPIO,  StringFormat = "BCM Pin: {0} Disabled. Pin toggled 5 times each time less than 50 milliseconds between toggles which indicate a hardware setup issue or fault.", Type = EventLogEntryType.Warning },
         };
     }
 }

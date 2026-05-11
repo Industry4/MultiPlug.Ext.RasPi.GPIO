@@ -12,6 +12,8 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,27 +33,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MultiPlug.Base, Version=1.0.71.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MultiPlug.Base.1.0.71\lib\net472\MultiPlug.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MultiPlug.Base, Version=1.0.76.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MultiPlug.Base.1.0.76\lib\net472\MultiPlug.Base.dll</HintPath>
     </Reference>
     <Reference Include="MultiPlug.Extension.Core, Version=1.0.64.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MultiPlug.Extension.Core.1.0.64\lib\net472\MultiPlug.Extension.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Swan, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\unosquare.swan.2.4.0\lib\netstandard2.0\Swan.dll</HintPath>
+    <Reference Include="Swan, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unosquare.Swan.3.0.0\lib\net461\Swan.dll</HintPath>
     </Reference>
-    <Reference Include="Swan.Lite, Version=2.4.1.0, Culture=neutral, PublicKeyToken=30c707c872729fff, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\unosquare.swan.lite.2.3.0\lib\netstandard2.0\Swan.Lite.dll</HintPath>
+    <Reference Include="Swan.Lite, Version=3.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unosquare.Swan.Lite.3.1.0\lib\net461\Swan.Lite.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.ValueTuple" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,15 +59,11 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="netstandard" />
-    <Reference Include="Unosquare.Raspberry.Abstractions">
-      <HintPath>..\packages\unosquare.raspberry.abstractions.0.4.0\lib\netstandard2.0\Unosquare.Raspberry.Abstractions.dll</HintPath>
+    <Reference Include="Unosquare.Raspberry.Abstractions, Version=0.4.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unosquare.Raspberry.Abstractions.0.4.1\lib\netstandard2.0\Unosquare.Raspberry.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Unosquare.RaspberryIO, Version=0.17.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\unosquare.raspberry.io.0.27.0\lib\netstandard2.0\Unosquare.RaspberryIO.dll</HintPath>
-    </Reference>
-    <Reference Include="Unosquare.WiringPi">
-      <HintPath>..\packages\unosquare.wiringpi.0.5.1.custom\lib\netstandard2.0\Unosquare.WiringPi.dll</HintPath>
+    <Reference Include="Unosquare.RaspberryIO, Version=0.27.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unosquare.Raspberry.IO.0.27.1\lib\netstandard2.0\Unosquare.RaspberryIO.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +79,7 @@
     <Compile Include="Models\API\IO\IOModel.cs" />
     <Compile Include="Models\Apps\Settings\AboutModel.cs" />
     <Compile Include="Models\Apps\Settings\AboutPostModel.cs" />
+    <Compile Include="Models\Apps\Settings\AltHomeModel.cs" />
     <Compile Include="Models\Apps\Settings\DeleteModel.cs" />
     <Compile Include="Models\Apps\Settings\EventModel.cs" />
     <Compile Include="Models\Apps\Settings\HomeModel.cs" />
@@ -108,6 +105,29 @@
     <Compile Include="Utils\Swan\Definitions.cs" />
     <Compile Include="Utils\Swan\ProcessResult.cs" />
     <Compile Include="Utils\Swan\ProcessRunner.cs" />
+    <Compile Include="Utils\WiringPi\BootstrapWiringPi.cs" />
+    <Compile Include="Utils\WiringPi\Enums.cs" />
+    <Compile Include="Utils\WiringPi\GpioController.cs" />
+    <Compile Include="Utils\WiringPi\GpioPin.cs" />
+    <Compile Include="Utils\WiringPi\GpioPin.Factory.cs" />
+    <Compile Include="Utils\WiringPi\I2CBus.cs" />
+    <Compile Include="Utils\WiringPi\I2CDevice.cs" />
+    <Compile Include="Utils\WiringPi\IGpioPinV2.cs" />
+    <Compile Include="Utils\WiringPi\Native\WiringPi.cs" />
+    <Compile Include="Utils\WiringPi\Native\WiringPi.I2C.cs" />
+    <Compile Include="Utils\WiringPi\Native\WiringPi.SerialPort.cs" />
+    <Compile Include="Utils\WiringPi\Native\WiringPi.Shift.cs" />
+    <Compile Include="Utils\WiringPi\Native\WiringPi.SoftPwm.cs" />
+    <Compile Include="Utils\WiringPi\Native\WiringPi.Spi.cs" />
+    <Compile Include="ViewControllers\API\Install\InstallController.cs" />
+    <Compile Include="Utils\WiringPi\Native\Delegates.cs" />
+    <Compile Include="Utils\WiringPi\Native\SysCall.cs" />
+    <Compile Include="Utils\WiringPi\Resources\EmbeddedResources.cs" />
+    <Compile Include="Utils\WiringPi\SpiBus.cs" />
+    <Compile Include="Utils\WiringPi\SpiChannel.cs" />
+    <Compile Include="Utils\WiringPi\SystemInfo.cs" />
+    <Compile Include="Utils\WiringPi\Threading.cs" />
+    <Compile Include="Utils\WiringPi\Timing.cs" />
     <Compile Include="ViewControllers\API\APIEndpoint.cs" />
     <Compile Include="ViewControllers\API\Config\IOConfigController.cs" />
     <Compile Include="ViewControllers\API\IO\IOStateController.cs" />
@@ -115,6 +135,12 @@
     <Compile Include="ViewControllers\Assets\DownloadsController.cs" />
     <Compile Include="ViewControllers\Assets\ImageController.cs" />
     <Compile Include="ViewControllers\Settings\About\AboutController.cs" />
+    <None Include="Utils\WiringPi\Resources\Bullseye\gpio" />
+    <None Include="Utils\WiringPi\Resources\Bullseye\libwiringPi.so.3.18" />
+    <None Include="Utils\WiringPi\Resources\Bullseye\wiringpi_3.18_bullseye_armhf.deb" />
+    <None Include="Utils\WiringPi\Resources\Trixie\gpio" />
+    <None Include="Utils\WiringPi\Resources\Trixie\libwiringPi.so.3.18" />
+    <None Include="Utils\WiringPi\Resources\Trixie\wiringpi_3.18_armhf.deb" />
     <None Include="ViewControllers\Settings\Home\SettingsHomeInstallWiringPi.cshtml" />
     <Compile Include="ViewControllers\Settings\SettingsApp.cs" />
     <Compile Include="ViewControllers\Settings\Subscriptions\SettingsDeleteSubscriptionController.cs" />
@@ -127,7 +153,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="ViewControllers\Assets\wiringpi-latest.deb" />
     <None Include="ViewControllers\Settings\About\SettingsAbout.cshtml" />
     <None Include="ViewControllers\Settings\Events\SettingsEvent.cshtml" />
     <None Include="ViewControllers\Settings\Home\SettingsHome.cshtml" />
@@ -137,9 +162,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +180,13 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\System.ValueTuple.4.6.2\build\net471\System.ValueTuple.targets" Condition="Exists('..\packages\System.ValueTuple.4.6.2\build\net471\System.ValueTuple.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\System.ValueTuple.4.6.2\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\System.ValueTuple.4.6.2\build\net471\System.ValueTuple.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -139,10 +139,25 @@
   <data name="SettingsEvent" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\ViewControllers\Settings\Events\SettingsEvent.cshtml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="wiringpi_latest" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\ViewControllers\Assets\wiringpi-latest.deb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="SettingsHomeInstallWiringPi" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\ViewControllers\Settings\Home\SettingsHomeInstallWiringPi.cshtml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="gpio" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Utils\WiringPi\Resources\Trixie\gpio;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="gpio_bullseye" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Utils\WiringPi\Resources\Bullseye\gpio;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="libwiringPi_so_3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Utils\WiringPi\Resources\Trixie\libwiringPi.so.3.18;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="libwiringPi_so_3_bullseye" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Utils\WiringPi\Resources\Bullseye\libwiringPi.so.3.18;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="wiringpi_3_18_armhf" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Utils\WiringPi\Resources\Trixie\wiringpi_3.18_armhf.deb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="wiringpi_3_18_bullseye_armhf" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Utils\WiringPi\Resources\Bullseye\wiringpi_3.18_bullseye_armhf.deb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

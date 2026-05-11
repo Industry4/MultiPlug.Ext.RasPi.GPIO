@@ -16,21 +16,68 @@
 
         @Include("MultiPlug.Ext.RasPi.GPIO.RaspPiGPIO_Settings_Navigation")
 
+        @if (Model.Extension.Model.RestartMultiPlug)
+        {
+            <div class="alert">
+                <strong>Reboot Required</strong> Changes have been made that require a system reboot to be applied.
+            </div>
+        }
+
         <div class="row-fluid">
             <div class="box">
                 <h4>Prerequisite Not Met</h4>
                 <div class="row-fluid">
                     <div class="well">
-                        <div class="row-fluid">
-                            <p>This extension requires WiringPi 2.52 to be installed. You can <a href="@Raw(Model.Context.Paths.Assets)downloads/wiringpi-latest.deb">download it here</a> and install it using the following command:</p>
-                            <blockquote>
-                                <p>sudo apt install ./wiring-pi-lastest.deb</p>
-                            </blockquote>
-                            <p>Restart MultiPlug once this is complete.</p>
-                        </div>
+                        @if (Model.Extension.Model.RestartMultiPlug)
+                        {
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="span12"><b>Please restart MultiPlug.</b></div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <p>This extension requires WiringPi 3.18 to be installed.</p>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <a class="btn btn-blue btn-install" href="@Raw(Model.Context.Paths.APIs)install/">Install</a>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <p>Alternatively you can <a href="@Raw(Model.Context.Paths.Assets)downloads/wiringpi_3.18_armhf.deb">download it here</a> and install it using the following command:</p>
+                                    <blockquote>
+                                        <p>sudo apt install ./wiringpi_3.18_armhf.deb</p>
+                                    </blockquote>
+                                    <p>Restart MultiPlug once this is complete.</p>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </form>
+
+<script>
+    $(".btn-install").click(function (event) {
+        event.preventDefault();
+
+        $.post($(this).attr('href'), function (data) {
+        })
+        .done(function () {
+            alert("Install Complete. Restart MultiPlug.");
+            location.reload();
+        })
+        .fail(function (xhr, status, error) {
+            alert("Install Error " + xhr.responseJSON.errorMessage);
+        });
+    });
+
+</script>

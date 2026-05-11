@@ -20,6 +20,10 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.Home
                 return new Response
                 {
                     Template = Templates.HomeAlt,
+                    Model = new AltHomeModel
+                    {
+                        RestartMultiPlug = Core.Instance.RaspberryPi.RestartMultiPlug
+                    }
                 };
             }
 

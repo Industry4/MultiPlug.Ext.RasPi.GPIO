@@ -19,10 +19,10 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MultiPlug.Ext.RasPi.GPIO.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,49 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] gpio {
+            get {
+                object obj = ResourceManager.GetObject("gpio", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] gpio_bullseye {
+            get {
+                object obj = ResourceManager.GetObject("gpio_bullseye", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] libwiringPi_so_3 {
+            get {
+                object obj = ResourceManager.GetObject("libwiringPi_so_3", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] libwiringPi_so_3_bullseye {
+            get {
+                object obj = ResourceManager.GetObject("libwiringPi_so_3_bullseye", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap raspberry_pi {
+        public static System.Drawing.Bitmap raspberry_pi {
             get {
                 object obj = ResourceManager.GetObject("raspberry_pi", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
@@ -73,19 +113,24 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         /// <summary>
         ///   Looks up a localized string similar to @model MultiPlug.Base.Http.EdgeApp
         ///
-        ///&lt;section class=&quot;row-fluid&quot;&gt;
+        ///@functions
+        ///{
+        ///    string isCurrentLoggingLevel(int theLevel)
+        ///    {
+        ///        return (@Model.Extension.Model.LoggingLevel == theLevel) ? &quot;selected&quot; : &quot;&quot;;
+        ///    }
         ///
-        ///    &lt;div class=&quot;row-fluid&quot;&gt;
-        ///        &lt;div class=&quot;box&quot;&gt;
-        ///            &lt;div class=&quot;span3&quot;&gt;
-        ///                &lt;a style=&quot;line-height: 52px;&quot; href=&quot;#&quot;&gt;&lt;img alt=&quot;Raspberry Pi Logo&quot; src=&quot;@Raw(Model.Context.Paths.Assets)images/raspberry-pi.png&quot;&gt;&lt;/a&gt;
-        ///            &lt;/div&gt;
-        ///            &lt;div class=&quot;span6&quot;&gt;
-        ///                &lt;p style=&quot;font-size:26px; line-height: 54px; text-align: center; margin: 0px;&quot;&gt;Raspberry Pi Configuration&lt;/p&gt;
-        ///            &lt;/div&gt;
-        ///   [rest of string was truncated]&quot;;.
+        ///}
+        ///
+        ///&lt;form action=&quot;&quot; method=&quot;post&quot; accept-charset=&quot;utf-8&quot; enctype=&quot;application/x-www-form-urlencoded&quot;&gt;
+        ///    &lt;section class=&quot;row-fluid&quot;&gt;
+        ///
+        ///        &lt;div class=&quot;row-fluid&quot;&gt;
+        ///            &lt;div class=&quot;box&quot;&gt;
+        ///                &lt;div class=&quot;span2&quot;&gt;
+        ///                    &lt;a style=&quot;line-height: 52px;&quot; href=&quot;#&quot;&gt;&lt;img alt=&quot;R [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string SettingsAbout {
+        public static string SettingsAbout {
             get {
                 return ResourceManager.GetString("SettingsAbout", resourceCulture);
             }
@@ -102,10 +147,10 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         ///                &lt;div class=&quot;span4&quot;&gt;
         ///                    &lt;a style=&quot;line-height: 52px;&quot; href=&quot;#&quot;&gt;&lt;img alt=&quot;Raspberry Pi Logo&quot; src=&quot;@Raw(Model.Context.Paths.Assets)images/raspberry-pi.png&quot;&gt;&lt;/a&gt;
         ///                &lt;/div&gt;
-        ///                &lt;div class=&quot;span3&quot;&gt;
+        ///                &lt;div class=&quot;span4&quot;&gt;
         ///                    &lt;p [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string SettingsEvent {
+        public static string SettingsEvent {
             get {
                 return ResourceManager.GetString("SettingsEvent", resourceCulture);
             }
@@ -135,7 +180,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         ///    {
         ///        return PullM [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string SettingsHome {
+        public static string SettingsHome {
             get {
                 return ResourceManager.GetString("SettingsHome", resourceCulture);
             }
@@ -144,28 +189,18 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         /// <summary>
         ///   Looks up a localized string similar to @model MultiPlug.Base.Http.EdgeApp
         ///
-        ///@functions {
+        ///&lt;form action=&quot;&quot; method=&quot;post&quot; accept-charset=&quot;utf-8&quot; enctype=&quot;application/x-www-form-urlencoded&quot;&gt;
+        ///    &lt;section class=&quot;row-fluid&quot;&gt;
         ///
-        ///    public static string IsUnset(string Output)
-        ///    {
-        ///        return Output == &quot;&quot; ? &quot;selected&quot; : string.Empty;
-        ///    }
-        ///
-        ///    public static string IsOutput(string Output)
-        ///    {
-        ///        return Output == &quot;true&quot; ? &quot;selected&quot; : string.Empty;
-        ///    }
-        ///
-        ///    public static string IsInput(string Output)
-        ///    {
-        ///        return Output == &quot;false&quot; ? &quot;selected&quot; : string.Empty;
-        ///    }
-        ///
-        ///    public static string PullModeOff(int PullMode)
-        ///    {
-        ///        return PullM [rest of string was truncated]&quot;;.
+        ///        &lt;div class=&quot;row-fluid&quot;&gt;
+        ///            &lt;div class=&quot;box&quot;&gt;
+        ///                &lt;div class=&quot;span2&quot;&gt;
+        ///                    &lt;a style=&quot;line-height: 52px;&quot; href=&quot;#&quot;&gt;&lt;img alt=&quot;Raspberry Pi Logo&quot; src=&quot;@Raw(Model.Context.Paths.Assets)images/raspberry-pi.png&quot;&gt;&lt;/a&gt;
+        ///                &lt;/div&gt;
+        ///                &lt;div class=&quot;span8&quot;&gt;
+        ///                    &lt;p [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string SettingsHomeInstallWiringPi {
+        public static string SettingsHomeInstallWiringPi {
             get {
                 return ResourceManager.GetString("SettingsHomeInstallWiringPi", resourceCulture);
             }
@@ -188,7 +223,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         ///    {
         ///        return Model.Context.Paths.Current == Model.Context.Paths.Home + &quot;about/&quot; ? &quot;active&quot; :  [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string SettingsNavigation {
+        public static string SettingsNavigation {
             get {
                 return ResourceManager.GetString("SettingsNavigation", resourceCulture);
             }
@@ -218,7 +253,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         ///    {
         ///        return PullM [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string SettingsSetup {
+        public static string SettingsSetup {
             get {
                 return ResourceManager.GetString("SettingsSetup", resourceCulture);
             }
@@ -227,7 +262,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         /// <summary>
         ///   Looks up a localized string similar to @model MultiPlug.Base.Http.EdgeApp
         ///
-        ///&lt;form action=&quot;&quot; method=&quot;post&quot; accept-charset=&quot;utf-8&quot; enctype=&quot;application/x-www-form-urlencoded&quot;&gt;
+        ///&lt;form action=&quot;&quot; method=&quot;post&quot; accept-charset=&quot;utf-8&quot; enctype=&quot;application/x-www-form-urlencoded&quot; autocomplete=&quot;off&quot;&gt;
         ///    &lt;section class=&quot;row-fluid&quot;&gt;
         ///
         ///        &lt;div class=&quot;row-fluid&quot;&gt;
@@ -236,9 +271,9 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         ///                    &lt;a style=&quot;line-height: 52px;&quot; href=&quot;#&quot;&gt;&lt;img alt=&quot;Raspberry Pi Logo&quot; src=&quot;@Raw(Model.Context.Paths.Assets)images/raspberry-pi.png&quot;&gt;&lt;/a&gt;
         ///                &lt;/div&gt;
         ///                &lt;div class=&quot;span3&quot;&gt;
-        ///                    &lt;p [rest of string was truncated]&quot;;.
+        ///    [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string SettingsSubscriptions {
+        public static string SettingsSubscriptions {
             get {
                 return ResourceManager.GetString("SettingsSubscriptions", resourceCulture);
             }
@@ -247,9 +282,19 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        internal static byte[] wiringpi_latest {
+        public static byte[] wiringpi_3_18_armhf {
             get {
-                object obj = ResourceManager.GetObject("wiringpi_latest", resourceCulture);
+                object obj = ResourceManager.GetObject("wiringpi_3_18_armhf", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] wiringpi_3_18_bullseye_armhf {
+            get {
+                object obj = ResourceManager.GetObject("wiringpi_3_18_bullseye_armhf", resourceCulture);
                 return ((byte[])(obj));
             }
         }

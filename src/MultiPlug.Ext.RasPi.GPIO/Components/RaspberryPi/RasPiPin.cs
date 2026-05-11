@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Unosquare.RaspberryIO.Abstractions;
-
 using MultiPlug.Base.Exchange;
 using MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings;
 using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi;
-using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi.Subscription;
 using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi.Event;
+using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi.Subscription;
+using MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi;
 
 namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 {
@@ -21,19 +21,24 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 
         internal static bool FireEvents = false;
         private bool m_FireEvents = true;
-        private bool InitStateSet = false;
-        private bool m_Debouncing = false;
+        private bool m_InitStateSet = false;
+        private readonly object m_StateChangeLock = new object();
+        private Stopwatch m_StateChangeStopWatch = new Stopwatch();
+        private int m_TooQuickCounter = 0;
 
-        internal event Action<Diagnostics.EventLogEntryCodes, string[]> Log;
+        internal event Action<Diagnostics.EventLogEntryCodes, string[]> LogVerbose;
+        internal event Action<Diagnostics.EventLogEntryCodes, string[]> LogError;
 
         public bool CurrentState { get { return m_GpioPin.LastValue; } }
+
+        public int PinNumber { get { return m_GpioPin.BcmPinNumber; } }
 
         public void SetState(bool theState)
         {
             m_GpioPin.Write(theState);
         }
 
-        public RasPiPin(IGpioPin theGpioPin )
+        public RasPiPin(IGpioPinV2 theGpioPin )
         {
             Debounce = 40;
 
@@ -44,58 +49,81 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             Event = new RasPiPinEvent { Guid = NewEventGuid, Id = NewEventGuid, Description = "BCM Pin: " + theGpioPin.BcmPinNumber.ToString(), Subjects = new string[] { "value" } };
             Event.CachedPayload = new Func<Payload>(CreateGroupData);
 
-            BcmPinNumber = theGpioPin.BcmPinNumber.ToString();
+            base.BcmPinNumber = theGpioPin.BcmPinNumber.ToString();
+
+            m_StateChangeStopWatch.Start();
         }
 
         private void OnPinWrite()
         {
             if (m_GpioPin.LastValue)
             {
-                Log?.Invoke(Diagnostics.EventLogEntryCodes.PinOutHigh, new string[] { BcmPinNumber });
+                LogVerbose?.Invoke(Diagnostics.EventLogEntryCodes.PinOutHigh, new string[] { base.BcmPinNumber });
             }
             else
             {
-                Log?.Invoke(Diagnostics.EventLogEntryCodes.PinOutLow, new string[] { BcmPinNumber });
+                LogVerbose?.Invoke(Diagnostics.EventLogEntryCodes.PinOutLow, new string[] { base.BcmPinNumber });
             }
 
             Event.Invoke(CreateGroupData());
         }
 
-        private void SetOutput(string theValue)    // Using String to use Empty as a unset value
+        private void SetOutput(string theValue)    
         {
-            Output = theValue;
             try
             {
-                if (!string.IsNullOrEmpty(theValue))
+                if (string.IsNullOrEmpty(theValue) == false) // Using String to use Empty as a unset value
                 {
-
                     SuppressEvents();
+
+                    // Is OutPut
                     if (string.Equals(theValue, c_True, StringComparison.OrdinalIgnoreCase))
                     {
+                        // Currently in Input, now being Output.
+                        if (string.Equals(Output, c_False, StringComparison.OrdinalIgnoreCase))
+                        {
+                            m_GpioPin.RemoveInterruptCallback();
+                        }
+
                         m_GpioPin.PinMode = GpioPinDriveMode.Output;
+
+                        Output = theValue;
                     }
+                    // Is InPut
                     else
                     {
                         m_GpioPin.PinMode = GpioPinDriveMode.Input;
                         m_GpioPin.InputPullMode = (GpioPinResistorPullMode)PullMode;
 
                         m_GpioPin.Read();
+                        m_GpioPin.RegisterInterruptCallback(EdgeDetection.FallingAndRisingEdge, Convert.ToUInt64(Debounce.Value));
 
-                        m_GpioPin.RegisterInterruptCallback(EdgeDetection.FallingAndRisingEdge, InterruptHandler);
+                        Output = theValue;
                     }
+                }
+                else // Unset
+                {
+                    // Currently a Input, now being Unset.
+                    if(string.Equals(Output, c_False, StringComparison.OrdinalIgnoreCase))
+                    {
+                        m_GpioPin.RemoveInterruptCallback();
+                    }
+
+                    Output = theValue;
                 }
             }
             catch (Exception theException)
             {
-                Log?.Invoke(Diagnostics.EventLogEntryCodes.GenericExceptionGPIO, new string[] { theException.Message, theException.InnerException != null ? theException.InnerException.Message : string.Empty });
+                LogError?.Invoke(Diagnostics.EventLogEntryCodes.GenericExceptionGPIO, new string[] { theException.Message, theException.InnerException != null ? theException.InnerException.Message : string.Empty });
+                Output = theValue;
             }
         }
 
         private void Init()
         {
-            if (!InitStateSet)
+            if (!m_InitStateSet)
             {
-                InitStateSet = true;
+                m_InitStateSet = true;
 
                 if (isOutput && InitState != 0)
                 {
@@ -107,9 +135,17 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 
         internal void Shutdown()
         {
-            if( isOutput && ShutdownState != 0)
+            if (isOutput && ShutdownState != 0)
             {
                 m_GpioPin.Write(ShutdownState == 1 ? true : false);
+            }
+
+            if (string.IsNullOrEmpty(Output) == false) // String Empty is Unset
+            {
+                if (isOutput == false)
+                {
+                    m_GpioPin.RemoveInterruptCallback();
+                }
             }
         }
 
@@ -134,61 +170,44 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             RunOnce.Start();
         }
 
-
-        private void InterruptHandler()
+        internal void OnInputChange(int theEdge)
         {
-            if (m_Debouncing)
+            lock (m_StateChangeLock)
             {
-                return;
-            }
+                m_GpioPin.RemoveInterruptCallback();
 
-            if ( Debounce.Value > 0 )
-            {
-                m_Debouncing = true;
-                Task.Run(async delegate
+                m_StateChangeStopWatch.Stop();
+                TimeSpan ts = m_StateChangeStopWatch.Elapsed;
+
+                // Has the State toggled too quickly indicating a setup or hardware fault, eg floating pin.
+                if (ts.Days == 0 && ts.Hours == 0 && ts.Seconds == 0 && ts.Milliseconds < 50)
                 {
-                    bool LastValue = m_GpioPin.LastValue;
+                    m_TooQuickCounter++;
 
-                    bool ValuePrevious = m_GpioPin.Read();
-
-                    bool DoubleChecked = false;   // Check one more time for good measure
-
-                    int DebouceDelay = Debounce.Value;
-
-                    while ( true )
+                    if (m_TooQuickCounter == 5)
                     {
-                        await Task.Delay(DebouceDelay);
-
-                        bool ValueNow = m_GpioPin.Read();
-
-                        if (ValueNow == ValuePrevious)
-                        {
-                            if(DoubleChecked)
-                            {
-                                ValuePrevious = ValueNow;
-                                break;
-                            }
-                            else
-                            {
-                                DebouceDelay = 10;
-                                DoubleChecked = true;
-                            }
-                        }
-                        else
-                        {
-                            DoubleChecked = false;
-                        }
-
-                        ValuePrevious = ValueNow;
+                        m_TooQuickCounter = 0;
+                        LogError?.Invoke(Diagnostics.EventLogEntryCodes.PinDisabled, new string[] { BcmPinNumber });
+                        var lv = m_GpioPin.LastValue;
+                        m_GpioPin.LastValue = false;
+                        InvokeEvent(lv, m_GpioPin.LastValue); // Set the Output to Low
+                        Output = string.Empty; // Set pin to Unset so User has to investigate issue.
+                        return;
                     }
+                }
+                else
+                {
+                    m_TooQuickCounter = 0;
+                }
 
-                    InvokeEvent(LastValue, ValuePrevious);
-                    m_Debouncing = false;
-                });
-            }
-            else
-            {
-                InvokeEvent(m_GpioPin.LastValue, m_GpioPin.Read());
+                m_StateChangeStopWatch.Restart();
+
+                var LastValue = m_GpioPin.LastValue;
+                m_GpioPin.LastValue = theEdge == 2;
+                InvokeEvent(LastValue, m_GpioPin.LastValue);
+
+                // Interrupts would stop randomly after a period of time, so removing and adding on each input change.
+                m_GpioPin.RegisterInterruptCallback(EdgeDetection.FallingAndRisingEdge, Convert.ToUInt64(Debounce.Value));
             }
         }
 
@@ -205,19 +224,15 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                 {
                     if (theCurrentPinState)
                     {
-                        Log?.Invoke(Diagnostics.EventLogEntryCodes.PinInHigh, new string[] { BcmPinNumber });
+                        LogVerbose?.Invoke(Diagnostics.EventLogEntryCodes.PinInHigh, new string[] { base.BcmPinNumber });
                     }
                     else
                     {
-                        Log?.Invoke(Diagnostics.EventLogEntryCodes.PinInLow, new string[] { BcmPinNumber });
+                        LogVerbose?.Invoke(Diagnostics.EventLogEntryCodes.PinInLow, new string[] { base.BcmPinNumber });
                     }
 
                     Event.Invoke(CreateGroupData());
                 }
-            }
-            else
-            {
-                Console.WriteLine(DateTime.Now.ToString("ReadGpioPin() Suppressed"));
             }
         }
 
