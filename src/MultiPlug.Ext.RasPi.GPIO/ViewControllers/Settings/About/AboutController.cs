@@ -29,7 +29,8 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Settings.About
                     Version = ExecutingAssembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version,
                     Log = string.Join("\r", Core.Instance.RaspberryPi.LoggingService.Read()),
                     WiringPiVersion = Core.Instance.RaspberryPi.GPIOVersion,
-                    LoggingLevel = Core.Instance.RaspberryPi.LoggingLevel
+                    LoggingLevel = Core.Instance.RaspberryPi.LoggingLevel,
+                    Arm64OS = Core.Instance.RaspberryPi.IsArm64OS
                 }
             };
         }

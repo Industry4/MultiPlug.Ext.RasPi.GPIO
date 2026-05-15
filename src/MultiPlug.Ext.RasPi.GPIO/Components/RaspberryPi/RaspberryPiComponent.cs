@@ -13,8 +13,8 @@ using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi;
 using MultiPlug.Ext.RasPi.GPIO.Models.Components.RaspberryPi.Subscription;
 using MultiPlug.Ext.RasPi.GPIO.Utils.Swan;
 using MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi;
-using MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Resources;
 using MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Native;
+using MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Resources;
 
 namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 {
@@ -31,6 +31,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
         internal bool PlatformSupported { get; private set; } = true;
         internal bool WiringPiInstalled { get; private set; } = true;
         internal bool OSRaspbianBullseye { get; private set; }
+        internal bool IsArm64OS { get; set; }
         internal bool RestartMultiPlug { get; set; }
 
         private const string c_GPIOVersionDefault = "Unknown";
@@ -92,6 +93,21 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                 {
                     OSRaspbianBullseye = true;
                 }
+            }
+
+            Task<ProcessResult> Is64BitTask = ProcessRunner.GetProcessResultAsync("dpkg-architecture", "--query DEB_HOST_ARCH");
+
+            try
+            {
+                Is64BitTask.Wait();
+            }
+            catch
+            {
+            }
+
+            if (Is64BitTask.Result.Okay() && Is64BitTask.Result.GetOutput().Contains("arm64"))
+            {
+                IsArm64OS = true;
             }
 
             Task<ProcessResult> VersionNumberTask = ProcessRunner.GetProcessResultAsync("gpio", "-v");
@@ -313,7 +329,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             string Result = null;
             try
             {
-                var Task = ProcessRunner.GetProcessResultAsync("apt-get", "-qq install /usr/local/bin/multiplug/extensions/MultiPlug.Ext.RasPi.GPIO/wiringpi_3.18_armhf.deb");
+                var Task = ProcessRunner.GetProcessResultAsync("apt-get", "-qq install /usr/local/bin/multiplug/extensions/MultiPlug.Ext.RasPi.GPIO/wiringpi_3.18.deb");
                 Task.Wait();
 
                 if (!Task.Result.Okay())

@@ -22,7 +22,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Resources
         public static void ExtractDebLirary()
         {
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
-            string targetPath = Path.Combine(basePath, "wiringpi_3.18_armhf.deb");
+            string targetPath = Path.Combine(basePath, "wiringpi_3.18.deb");
 
             if (Core.Instance.RaspberryPi.OSRaspbianBullseye)
             {
@@ -30,7 +30,15 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Resources
             }
             else
             {
-                File.WriteAllBytes(targetPath, Properties.Resources.wiringpi_3_18_armhf);            
+                if(Core.Instance.RaspberryPi.IsArm64OS)
+                {
+                    File.WriteAllBytes(targetPath, Properties.Resources.wiringpi_3_18_arm64);
+                }
+                else
+                {
+                    File.WriteAllBytes(targetPath, Properties.Resources.wiringpi_3_18_armhf);  
+                }
+         
             }
         }
         /// <summary>
@@ -44,7 +52,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Resources
             if(Core.Instance.RaspberryPi.OSRaspbianBullseye)
             {
                 string targetPath = Path.Combine(basePath, "gpio");
-                File.WriteAllBytes(targetPath, Properties.Resources.gpio);
+                File.WriteAllBytes(targetPath, Properties.Resources.gpio_bullseye);
 
                 try
                 {
@@ -69,34 +77,59 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Resources
             }
             else
             {
-                string targetPath = Path.Combine(basePath, "gpio");
-                File.WriteAllBytes(targetPath, Properties.Resources.gpio_bullseye);
+                if(Core.Instance.RaspberryPi.IsArm64OS)
+                {
+                    string targetPath = Path.Combine(basePath, "gpio");
+                    File.WriteAllBytes(targetPath, Properties.Resources.gpio_arm64);
 
-                try
-                {
-                    SysCall.Chmod(targetPath, (uint)executablePermissions);
-                }
-                catch
-                {
-                    /* Ignore */
-                }
+                    try
+                    {
+                        SysCall.Chmod(targetPath, (uint)executablePermissions);
+                    }
+                    catch
+                    {
+                        /* Ignore */
+                    }
 
-                targetPath = Path.Combine(basePath, "libwiringPi.so.3.18");
-                File.WriteAllBytes(targetPath, Properties.Resources.libwiringPi_so_3);
+                    targetPath = Path.Combine(basePath, "libwiringPi.so.3.18");
+                    File.WriteAllBytes(targetPath, Properties.Resources.libwiringPi_so_3_arm64);
 
-                try
-                {
-                    SysCall.Chmod(targetPath, (uint)executablePermissions);
+                    try
+                    {
+                        SysCall.Chmod(targetPath, (uint)executablePermissions);
+                    }
+                    catch
+                    {
+                        /* Ignore */
+                    }
                 }
-                catch
+                else
                 {
-                    /* Ignore */
+                    string targetPath = Path.Combine(basePath, "gpio");
+                    File.WriteAllBytes(targetPath, Properties.Resources.gpio);
+
+                    try
+                    {
+                        SysCall.Chmod(targetPath, (uint)executablePermissions);
+                    }
+                    catch
+                    {
+                        /* Ignore */
+                    }
+
+                    targetPath = Path.Combine(basePath, "libwiringPi.so.3.18");
+                    File.WriteAllBytes(targetPath, Properties.Resources.libwiringPi_so_3);
+
+                    try
+                    {
+                        SysCall.Chmod(targetPath, (uint)executablePermissions);
+                    }
+                    catch
+                    {
+                        /* Ignore */
+                    }
                 }
             }
-
-
-
-
         }
     }
 }

@@ -13,5 +13,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Models.Apps.Settings
         public string Log { get; set; }
         public string WiringPiVersion { get; set; }
         public int LoggingLevel { get; set; }
+        public bool Arm64OS { get; set; }
     }
 }

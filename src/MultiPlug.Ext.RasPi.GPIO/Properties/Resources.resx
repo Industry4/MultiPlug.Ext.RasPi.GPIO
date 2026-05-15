@@ -160,4 +160,13 @@
   <data name="wiringpi_3_18_bullseye_armhf" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Utils\WiringPi\Resources\Bullseye\wiringpi_3.18_bullseye_armhf.deb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="gpio_arm64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Utils\WiringPi\Resources\Trixie\arm64\gpio;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="libwiringPi_so_3_arm64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Utils\WiringPi\Resources\Trixie\arm64\libwiringPi.so.3.18;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="wiringpi_3_18_arm64" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Utils\WiringPi\Resources\Trixie\arm64\wiringpi_3.18_arm64.deb;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

@@ -73,6 +73,16 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        public static byte[] gpio_arm64 {
+            get {
+                object obj = ResourceManager.GetObject("gpio_arm64", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         public static byte[] gpio_bullseye {
             get {
                 object obj = ResourceManager.GetObject("gpio_bullseye", resourceCulture);
@@ -86,6 +96,16 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         public static byte[] libwiringPi_so_3 {
             get {
                 object obj = ResourceManager.GetObject("libwiringPi_so_3", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] libwiringPi_so_3_arm64 {
+            get {
+                object obj = ResourceManager.GetObject("libwiringPi_so_3_arm64", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -276,6 +296,16 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         public static string SettingsSubscriptions {
             get {
                 return ResourceManager.GetString("SettingsSubscriptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] wiringpi_3_18_arm64 {
+            get {
+                object obj = ResourceManager.GetObject("wiringpi_3_18_arm64", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

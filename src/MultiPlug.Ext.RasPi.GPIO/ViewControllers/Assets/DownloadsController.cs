@@ -10,7 +10,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Assets
     {
         public Response Get(string theName)
         {
-            if(theName.Equals("wiringpi_3.18_armhf.deb", StringComparison.OrdinalIgnoreCase))
+            if(theName.Equals("wiringpi_3.18.deb", StringComparison.OrdinalIgnoreCase))
             {
                 if (Core.Instance.RaspberryPi.OSRaspbianBullseye)
                 {
@@ -22,11 +22,22 @@ namespace MultiPlug.Ext.RasPi.GPIO.ViewControllers.Assets
                 }
                 else
                 {
-                    return new Response
+                    if (Core.Instance.RaspberryPi.IsArm64OS)
                     {
-                        RawBytes = Resources.wiringpi_3_18_armhf,
-                        MediaType = "application/octet-stream"
-                    };
+                        return new Response
+                        {
+                            RawBytes = Resources.wiringpi_3_18_arm64,
+                            MediaType = "application/octet-stream"
+                        };
+                    }
+                    else
+                    {
+                        return new Response
+                        {
+                            RawBytes = Resources.wiringpi_3_18_armhf,
+                            MediaType = "application/octet-stream"
+                        };
+                    }
                 }
             }
 
