@@ -18,7 +18,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Diagnostics
             new EventLogDefinition { Code = (uint) EventLogEntryCodes.MissingDllSwan,                           Source = (uint) EventLogEntryCodes.SourceWiringPi,  StringFormat = "Missing file: Swan.dll",                                Type = EventLogEntryType.Error },
             new EventLogDefinition { Code = (uint) EventLogEntryCodes.PlatformNotSupportedException,            Source = (uint) EventLogEntryCodes.SourceWiringPi,  StringFormat = "Platform Not Supported Exception",                      Type = EventLogEntryType.Warning },
             new EventLogDefinition { Code = (uint) EventLogEntryCodes.GenericExceptionLib,                      Source = (uint) EventLogEntryCodes.SourceWiringPi,  StringFormat = "Exception Message: {0} Inner Message: {1}",             Type = EventLogEntryType.Error },
-            new EventLogDefinition { Code = (uint) EventLogEntryCodes.MissingWiringPiLib,                      Source = (uint) EventLogEntryCodes.SourceWiringPi,  StringFormat = "WiringPi 3.18 Prerequisite Not Met",                     Type = EventLogEntryType.Error },
+            new EventLogDefinition { Code = (uint) EventLogEntryCodes.MissingWiringPiLib,                      Source = (uint) EventLogEntryCodes.SourceWiringPi,  StringFormat = "WiringPi 3.181 Prerequisite Not Met",                     Type = EventLogEntryType.Error },
 
             new EventLogDefinition { Code = (uint) EventLogEntryCodes.PinInLow,                                 Source = (uint) EventLogEntryCodes.SourceGPIO,  StringFormat = "IN BCM Pin: {0} State: LOW",                                Type = EventLogEntryType.Information },
             new EventLogDefinition { Code = (uint) EventLogEntryCodes.PinInHigh,                                Source = (uint) EventLogEntryCodes.SourceGPIO,  StringFormat = "IN BCM Pin: {0} State: HIGH",                               Type = EventLogEntryType.Information },
@@ -27,6 +27,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Diagnostics
             new EventLogDefinition { Code = (uint) EventLogEntryCodes.PinOutHigh,                               Source = (uint) EventLogEntryCodes.SourceGPIO,  StringFormat = "OUT BCM Pin: {0} State: HIGH",                              Type = EventLogEntryType.Information },
             new EventLogDefinition { Code = (uint) EventLogEntryCodes.GenericExceptionGPIO,                      Source = (uint) EventLogEntryCodes.SourceGPIO,  StringFormat = "Exception Message: {0} Inner Message: {1}",                Type = EventLogEntryType.Error },
             new EventLogDefinition { Code = (uint) EventLogEntryCodes.PinDisabled,                              Source = (uint) EventLogEntryCodes.SourceGPIO,  StringFormat = "BCM Pin: {0} Disabled. Pin toggled 5 times each time less than 50 milliseconds between toggles which indicate a hardware setup issue or fault.", Type = EventLogEntryType.Warning },
+            new EventLogDefinition { Code = (uint) EventLogEntryCodes.WaitForInterruptError,                    Source = (uint) EventLogEntryCodes.SourceWiringPi,  StringFormat = "BCM Pin: {0} WaitForInterrupt Returned -1",        Type = EventLogEntryType.Error }
         };
     }
 }

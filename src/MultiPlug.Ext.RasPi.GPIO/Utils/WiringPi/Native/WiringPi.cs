@@ -15,7 +15,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Native
     /// </summary>
     public partial class WiringPi
     {
-        internal const string WiringPiLibrary = "libwiringPi.so.3.18";
+        internal const string WiringPiLibrary = "libwiringPi.so.3.181";
 
         #region WiringPi - Core Functions (https://github.com/WiringPi/WiringPi/blob/master/wiringPi/wiringPi.h)
 
@@ -404,6 +404,26 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Native
         /// <returns>The result code.</returns>
         [DllImport(WiringPiLibrary, EntryPoint = "micros", SetLastError = true)]
         public static extern uint Micros();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pin"></param>
+        /// <param name="edgeMode"></param>
+        /// <param name="ms"></param>
+        /// <param name="debounce_period_us"></param>
+        /// <returns></returns>
+        [DllImport(WiringPiLibrary, EntryPoint = "waitForInterrupt2", SetLastError = true)]
+        public static extern WPIWfiStatus waitForInterrupt2(int pin, int edgeMode, int ms, ulong debounce_period_us);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pin"></param>
+        /// <returns></returns>
+        [DllImport(WiringPiLibrary, EntryPoint = "waitForInterruptClose", SetLastError = true)]
+        public static extern int waitForInterruptClose(int pin);
+
 
         #endregion
     }

@@ -128,12 +128,18 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                 GPIOVersion = VersionNumberTask.Result.GetOutput().Split('\n')[0].Split(':')[1].Trim();
             }
 
-            if (GPIOVersion != "3.18")
+            if (GPIOVersion != "3.181")
             {
                 LoggingService.WriteEntry((uint)EventLogEntryCodes.MissingWiringPiLib);
                 WiringPiInstalled = false;
                 return;
             }
+
+            // Uncomment to enable WiringPi debug logging
+            //
+            //Environment.SetEnvironmentVariable("WIRINGPI_DEBUG", "1");
+            //
+            // Uncomment to enable WiringPi debug logging
 
             try
             {
@@ -162,8 +168,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
         private void InitPins()
         {
             List<RasPiPin> Pins = new List<RasPiPin>();
-
-            Utils.WiringPi.GpioPin.RegisteredInterruptCallbackSingleton(InterruptCallbackSingleton);
 
             try
             {
@@ -198,23 +202,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             }
 
             GPIO = Pins.ToArray();
-        }
-
-        private void InterruptCallbackSingleton(WPIWfiStatus thewfiStatus)
-        {
-            Task.Run(() =>
-            {
-                var wfiStatus = thewfiStatus;
-
-                foreach (var Pin in Core.Instance.RaspberryPi.GPIO)
-                {
-                    if (Pin.PinNumber == wfiStatus.pinBCM)
-                    {
-                        Pin.OnInputChange(wfiStatus.edge);
-                        break;
-                    }
-                }
-            });
         }
 
         private void OnLogWriteEntryVerbose(EventLogEntryCodes theLogCode, string[] theArg)
@@ -329,7 +316,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             string Result = null;
             try
             {
-                var Task = ProcessRunner.GetProcessResultAsync("apt-get", "-qq install /usr/local/bin/multiplug/extensions/MultiPlug.Ext.RasPi.GPIO/wiringpi_3.18.deb");
+                var Task = ProcessRunner.GetProcessResultAsync("apt-get", "-qq install /usr/local/bin/multiplug/extensions/MultiPlug.Ext.RasPi.GPIO/wiringpi_3.181.deb");
                 Task.Wait();
 
                 if (!Task.Result.Okay())

@@ -134,8 +134,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi
             }
         }
 
-        private bool InterruptCallbackRegistered { get { return InterruptCallback != null || InterruptCallbackV2Registered ==true; } }
-
         /// <summary>
         /// Gets the interrupt callback. Returns null if no interrupt
         /// has been registered.
@@ -148,33 +146,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi
         private void CallRegisteredInterruptCallback()
         {
             InterruptCallback?.Invoke();
-        }
-
-        private bool InterruptCallbackV2Registered = false;
-
-        /// <summary>
-        /// Gets the interrupt callback. Returns null if no interrupt
-        /// has been registered.
-        /// </summary>
-        private static Action<WPIWfiStatus> InterruptCallbackSingleton { get; set; } = null;
-
-        /// <summary>
-        /// Calls the registered Interrupt callback routine when there is one registered
-        /// </summary>
-        private static void CallRegisteredInterruptCallbackSingleton(WPIWfiStatus wfiStatus, IntPtr userdata)
-        {
-            InterruptCallbackSingleton?.Invoke(wfiStatus);
-        }
-
-        /// <summary>
-        /// Mono would crash if the callback wasn't Static so there is only one. 
-        /// Note: There was a time resource constraint to understand why this was.
-        /// The Single Handler will have to look at the WPIWfiStatus.pinBCM value and update the appropriate pin.
-        /// </summary>
-        /// <param name="callback"></param>
-        internal static void RegisteredInterruptCallbackSingleton(Action<WPIWfiStatus> callback)
-        {
-            InterruptCallbackSingleton = callback;
         }
 
         /// <summary>
@@ -654,7 +625,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi
         /// <exception cref="InvalidOperationException">callback.</exception>
         public void RegisterInterruptCallback(EdgeDetection edgeDetection, Action callback)
         {
-            if (InterruptCallbackRegistered)
+            if (InterruptCallback != null)
                 throw new InvalidOperationException("Interrupt already registered.");
             if (callback == null)
                 throw new ArgumentNullException(nameof(callback));
@@ -707,63 +678,23 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi
             throw new NotSupportedException("WiringPi does only support a simple interrupt callback that has no parameters.");
 
         /// <summary>
-        /// Register Interrupt Callback using new WiringPiISR2
+        /// 
         /// </summary>
         /// <param name="edgeDetection"></param>
-        /// <param name="callback"></param>
-        /// <param name="debounceperiod"></param>
-        /// <exception cref="InvalidOperationException"></exception>
-        /// <exception cref="ArgumentNullException"></exception>
-        public void RegisterInterruptCallback(EdgeDetection edgeDetection, ulong debounceperiod)
+        /// <param name="theDebouncePeriod"></param>
+        /// <returns></returns>
+        public WPIWfiStatus WaitForInterrupt(EdgeDetection edgeDetection, ulong theDebouncePeriod)
         {
-            if (InterruptCallbackRegistered)
-                throw new InvalidOperationException("Interrupt already registered.");
-
-            if (PinMode != GpioPinDriveMode.Input)
-            {
-                throw new InvalidOperationException(
-                    $"Unable to {nameof(RegisterInterruptCallback)} for pin {BcmPinNumber} because operating mode is {PinMode}."
-                    + $" Calling {nameof(RegisterInterruptCallback)} is only allowed if {nameof(PinMode)} is set to {GpioPinDriveMode.Input}");
-            }
-
-            lock (_syncLock)
-            {
-                var isrCallback = new InterruptServiceRoutineCallbackV2(CallRegisteredInterruptCallbackSingleton);
-                var registerResult = WiringPi.WiringPiISR2(BcmPinNumber, GetWiringPiEdgeDetection(edgeDetection), isrCallback, debounceperiod, IntPtr.Zero);
-                if (registerResult == 0)
-                {
-                    InterruptEdgeDetection = edgeDetection;
-                    InterruptCallbackV2Registered = true;
-                }
-                else
-                {
-                    HardwareException.Throw(nameof(GpioPin), nameof(RegisterInterruptCallback));
-                }
-            }
+            return WiringPi.waitForInterrupt2(BcmPinNumber, GetWiringPiEdgeDetection(edgeDetection), -1, theDebouncePeriod);
         }
 
         /// <summary>
-        /// Remove Register Interrupt Callback using new WiringPiISRStop
+        /// 
         /// </summary>
-        /// <exception cref="InvalidOperationException"></exception>
-        public void RemoveInterruptCallback()
+        /// <returns></returns>
+        public int WaitForInterruptClose()
         {
-            if (InterruptCallbackSingleton == null)
-                throw new InvalidOperationException("No Interrupt currently Registered.");
-
-            lock (_syncLock)
-            {
-                var unRegisterResult = WiringPi.WiringPiISRStop(BcmPinNumber);
-
-                if (unRegisterResult == 0)
-                {
-                    InterruptCallbackV2Registered = false;
-                }
-                else
-                {
-                    HardwareException.Throw(nameof(GpioPin), nameof(RemoveInterruptCallback));
-                }
-            }
+            return WiringPi.waitForInterruptClose(BcmPinNumber);
         }
 
         internal static WiringPiPin BcmToWiringPiPinNumber(BcmPin pin) =>

@@ -82,7 +82,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                         // Currently in Input, now being Output.
                         if (string.Equals(Output, c_False, StringComparison.OrdinalIgnoreCase))
                         {
-                            m_GpioPin.RemoveInterruptCallback();
+                            m_GpioPin.StopListening();
                         }
 
                         m_GpioPin.PinMode = GpioPinDriveMode.Output;
@@ -96,7 +96,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                         m_GpioPin.InputPullMode = (GpioPinResistorPullMode)PullMode;
 
                         m_GpioPin.Read();
-                        m_GpioPin.RegisterInterruptCallback(EdgeDetection.FallingAndRisingEdge, Convert.ToUInt64(Debounce.Value));
+                        m_GpioPin.StartListening(EdgeDetection.FallingAndRisingEdge, Convert.ToUInt64(Debounce.Value), OnInputChange, OnWaitForInterruptError);
 
                         Output = theValue;
                     }
@@ -106,7 +106,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                     // Currently a Input, now being Unset.
                     if(string.Equals(Output, c_False, StringComparison.OrdinalIgnoreCase))
                     {
-                        m_GpioPin.RemoveInterruptCallback();
+                        m_GpioPin.StopListening();
                     }
 
                     Output = theValue;
@@ -117,6 +117,11 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                 LogError?.Invoke(Diagnostics.EventLogEntryCodes.GenericExceptionGPIO, new string[] { theException.Message, theException.InnerException != null ? theException.InnerException.Message : string.Empty });
                 Output = theValue;
             }
+        }
+
+        private void OnWaitForInterruptError()
+        {
+            LogError?.Invoke(Diagnostics.EventLogEntryCodes.WaitForInterruptError, new string[] { PinNumber.ToString() });
         }
 
         private void Init()
@@ -144,7 +149,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             {
                 if (isOutput == false)
                 {
-                    m_GpioPin.RemoveInterruptCallback();
+                    m_GpioPin.StopListening();
                 }
             }
         }
@@ -174,8 +179,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
         {
             lock (m_StateChangeLock)
             {
-                m_GpioPin.RemoveInterruptCallback();
-
                 m_StateChangeStopWatch.Stop();
                 TimeSpan ts = m_StateChangeStopWatch.Elapsed;
 
@@ -192,6 +195,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                         m_GpioPin.LastValue = false;
                         InvokeEvent(lv, m_GpioPin.LastValue); // Set the Output to Low
                         Output = string.Empty; // Set pin to Unset so User has to investigate issue.
+                        m_GpioPin.StopListening();
                         return;
                     }
                 }
@@ -205,9 +209,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
                 var LastValue = m_GpioPin.LastValue;
                 m_GpioPin.LastValue = theEdge == 2;
                 InvokeEvent(LastValue, m_GpioPin.LastValue);
-
-                // Interrupts would stop randomly after a period of time, so removing and adding on each input change.
-                m_GpioPin.RegisterInterruptCallback(EdgeDetection.FallingAndRisingEdge, Convert.ToUInt64(Debounce.Value));
             }
         }
 

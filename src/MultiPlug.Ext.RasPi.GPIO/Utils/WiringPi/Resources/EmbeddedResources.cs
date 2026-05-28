@@ -22,21 +22,21 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Resources
         public static void ExtractDebLirary()
         {
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
-            string targetPath = Path.Combine(basePath, "wiringpi_3.18.deb");
+            string targetPath = Path.Combine(basePath, "wiringpi_3.181.deb");
 
             if (Core.Instance.RaspberryPi.OSRaspbianBullseye)
             {
-                File.WriteAllBytes(targetPath, Properties.Resources.wiringpi_3_18_bullseye_armhf);
+                File.WriteAllBytes(targetPath, Properties.Resources.wiringpi_3_181_bullseye_armhf_deb);
             }
             else
             {
                 if(Core.Instance.RaspberryPi.IsArm64OS)
                 {
-                    File.WriteAllBytes(targetPath, Properties.Resources.wiringpi_3_18_arm64);
+                    File.WriteAllBytes(targetPath, Properties.Resources.wiringpi_3_181_arm64_deb);
                 }
                 else
                 {
-                    File.WriteAllBytes(targetPath, Properties.Resources.wiringpi_3_18_armhf);  
+                    File.WriteAllBytes(targetPath, Properties.Resources.wiringpi_3_181_armhf_deb);  
                 }
          
             }
@@ -44,90 +44,28 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Resources
         /// <summary>
         /// Extracts all the file resources to the specified base path.
         /// </summary>
-        public static void ExtractAll()
+        public static void MigrationsDeleteOldFiles()
         {
             var basePath = AppDomain.CurrentDomain.BaseDirectory;
-            var executablePermissions = SysCall.StringToInteger("0777", IntPtr.Zero, 8);
 
-            if(Core.Instance.RaspberryPi.OSRaspbianBullseye)
+            string[] TargetFilePath = new string[]
             {
-                string targetPath = Path.Combine(basePath, "gpio");
-                File.WriteAllBytes(targetPath, Properties.Resources.gpio_bullseye);
+                Path.Combine(basePath, "gpio"),
+                Path.Combine(basePath, "libwiringPi.so.2.52"),
+                Path.Combine(basePath, "libwiringPi.so.3.18"),
+                Path.Combine(basePath, "wiringpi_3.18.deb"),
+                Path.Combine(basePath, "wiringpi_3.181.deb")
+            };
 
+            foreach (var ItemPath in TargetFilePath)
+            {
                 try
                 {
-                    SysCall.Chmod(targetPath, (uint)executablePermissions);
+                    File.Delete(ItemPath);
                 }
                 catch
                 {
                     /* Ignore */
-                }
-
-                targetPath = Path.Combine(basePath, "libwiringPi.so.3.18");
-                File.WriteAllBytes(targetPath, Properties.Resources.libwiringPi_so_3_bullseye);
-
-                try
-                {
-                    SysCall.Chmod(targetPath, (uint)executablePermissions);
-                }
-                catch
-                {
-                    /* Ignore */
-                }
-            }
-            else
-            {
-                if(Core.Instance.RaspberryPi.IsArm64OS)
-                {
-                    string targetPath = Path.Combine(basePath, "gpio");
-                    File.WriteAllBytes(targetPath, Properties.Resources.gpio_arm64);
-
-                    try
-                    {
-                        SysCall.Chmod(targetPath, (uint)executablePermissions);
-                    }
-                    catch
-                    {
-                        /* Ignore */
-                    }
-
-                    targetPath = Path.Combine(basePath, "libwiringPi.so.3.18");
-                    File.WriteAllBytes(targetPath, Properties.Resources.libwiringPi_so_3_arm64);
-
-                    try
-                    {
-                        SysCall.Chmod(targetPath, (uint)executablePermissions);
-                    }
-                    catch
-                    {
-                        /* Ignore */
-                    }
-                }
-                else
-                {
-                    string targetPath = Path.Combine(basePath, "gpio");
-                    File.WriteAllBytes(targetPath, Properties.Resources.gpio);
-
-                    try
-                    {
-                        SysCall.Chmod(targetPath, (uint)executablePermissions);
-                    }
-                    catch
-                    {
-                        /* Ignore */
-                    }
-
-                    targetPath = Path.Combine(basePath, "libwiringPi.so.3.18");
-                    File.WriteAllBytes(targetPath, Properties.Resources.libwiringPi_so_3);
-
-                    try
-                    {
-                        SysCall.Chmod(targetPath, (uint)executablePermissions);
-                    }
-                    catch
-                    {
-                        /* Ignore */
-                    }
                 }
             }
         }

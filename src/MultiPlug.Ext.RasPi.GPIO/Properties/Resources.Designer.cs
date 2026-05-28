@@ -61,66 +61,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] gpio {
-            get {
-                object obj = ResourceManager.GetObject("gpio", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] gpio_arm64 {
-            get {
-                object obj = ResourceManager.GetObject("gpio_arm64", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] gpio_bullseye {
-            get {
-                object obj = ResourceManager.GetObject("gpio_bullseye", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] libwiringPi_so_3 {
-            get {
-                object obj = ResourceManager.GetObject("libwiringPi_so_3", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] libwiringPi_so_3_arm64 {
-            get {
-                object obj = ResourceManager.GetObject("libwiringPi_so_3_arm64", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        public static byte[] libwiringPi_so_3_bullseye {
-            get {
-                object obj = ResourceManager.GetObject("libwiringPi_so_3_bullseye", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap raspberry_pi {
@@ -302,9 +242,9 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] wiringpi_3_18_arm64 {
+        public static byte[] wiringpi_3_181_arm64_deb {
             get {
-                object obj = ResourceManager.GetObject("wiringpi_3_18_arm64", resourceCulture);
+                object obj = ResourceManager.GetObject("wiringpi_3_181_arm64_deb", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -312,9 +252,9 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] wiringpi_3_18_armhf {
+        public static byte[] wiringpi_3_181_armhf_deb {
             get {
-                object obj = ResourceManager.GetObject("wiringpi_3_18_armhf", resourceCulture);
+                object obj = ResourceManager.GetObject("wiringpi_3_181_armhf_deb", resourceCulture);
                 return ((byte[])(obj));
             }
         }
@@ -322,9 +262,9 @@ namespace MultiPlug.Ext.RasPi.GPIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] wiringpi_3_18_bullseye_armhf {
+        public static byte[] wiringpi_3_181_bullseye_armhf_deb {
             get {
-                object obj = ResourceManager.GetObject("wiringpi_3_18_bullseye_armhf", resourceCulture);
+                object obj = ResourceManager.GetObject("wiringpi_3_181_bullseye_armhf_deb", resourceCulture);
                 return ((byte[])(obj));
             }
         }

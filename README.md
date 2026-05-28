@@ -47,4 +47,4 @@ The Extension can be accessed from **extensions/multiplug.ext.raspi.gpio/** with
 
 ## License
 
-This project is licensed under the MIT License. Uses [Wiring Pi 3.18](https://github.com/wiringpi/wiringpi)
+This project is licensed under the MIT License. Uses [Wiring Pi 3.181](https://github.com/Industry4/WiringPi) a fork of [Wiring Pi 3.18](https://github.com/wiringpi/wiringpi)

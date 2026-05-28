@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi;
 using Unosquare.RaspberryIO.Abstractions;
 
@@ -10,6 +11,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
 
         internal Action StateChange;
 
+        private bool m_PollInterrupt = false;
 
         public GpioPin(IGpioPinV2 theGpioPin)
         {
@@ -50,20 +52,57 @@ namespace MultiPlug.Ext.RasPi.GPIO.Components.RaspberryPi
             return LastValue;
         }
 
-        internal void RegisterInterruptCallback(EdgeDetection edgeDetection, Action callback)
+        internal void StartListening(EdgeDetection theEdgeDetection, ulong theDebouncePeriod, Action<int> theCallback, Action theErrorLog)
         {
-            m_GpioPin.RegisterInterruptCallback(edgeDetection, callback);
+            if(m_PollInterrupt)
+            {
+                return;
+            }
+
+            m_PollInterrupt = true;
+
+            Task.Run(() =>
+            {
+                bool LoggedOnce = false;
+
+                while (m_PollInterrupt)
+                {
+                    var result = m_GpioPin.WaitForInterrupt(theEdgeDetection, theDebouncePeriod);
+
+                    if(m_PollInterrupt)
+                    {
+                        if (result.statusOK == 1)
+                        {
+                            Task.Run(() =>
+                            {
+                                theCallback(result.edge);
+                            });
+                        }
+                        else
+                        {
+                            if(LoggedOnce == false)
+                            {
+                                LoggedOnce = true;
+
+                                if( theErrorLog != null )
+                                {
+                                    theErrorLog();
+                                }
+
+                            }
+                        }
+                    }
+                }
+            });
         }
 
-
-        internal void RegisterInterruptCallback(EdgeDetection edgeDetection, ulong debounceperiod)
+        internal void StopListening()
         {
-            m_GpioPin.RegisterInterruptCallback(edgeDetection, debounceperiod);
-        }
-
-        internal void RemoveInterruptCallback()
-        {
-            m_GpioPin.RemoveInterruptCallback();
+            if(m_PollInterrupt)
+            {
+                m_PollInterrupt = false;
+                m_GpioPin.WaitForInterruptClose();
+            }
         }
 
         internal void Write(bool value)

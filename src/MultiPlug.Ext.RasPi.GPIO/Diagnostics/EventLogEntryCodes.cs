@@ -22,5 +22,6 @@ namespace MultiPlug.Ext.RasPi.GPIO.Diagnostics
         PinInHigh = 73,
         GenericExceptionGPIO = 74,
         PinDisabled = 75,
+        WaitForInterruptError = 76,
     }
 }

@@ -20,7 +20,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi
         {
             lock (SyncLock)
             {
-                Resources.EmbeddedResources.ExtractAll();
+                Resources.EmbeddedResources.MigrationsDeleteOldFiles();
 
                 DependencyContainer.Current.Register<IGpioController>(new GpioController());
                 DependencyContainer.Current.Register<ISpiBus>(new SpiBus());

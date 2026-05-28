@@ -1,4 +1,5 @@
-﻿using Unosquare.RaspberryIO.Abstractions;
+﻿using MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi.Native;
+using Unosquare.RaspberryIO.Abstractions;
 
 namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi
 {
@@ -7,8 +8,7 @@ namespace MultiPlug.Ext.RasPi.GPIO.Utils.WiringPi
     /// </summary>
     public interface IGpioPinV2 : IGpioPin
     {
-        void RegisterInterruptCallback(EdgeDetection edgeDetection, ulong debounceperiod);
-
-        void RemoveInterruptCallback();
+        WPIWfiStatus WaitForInterrupt(EdgeDetection edgeDetection, ulong theDebouncePeriod);
+        int WaitForInterruptClose();
     }
 }
